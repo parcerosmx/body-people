@@ -9,9 +9,9 @@
 - **Objetivo de la web:** que la persona escriba por WhatsApp. Mientras el reto está activo, pide un cupo del
   **Reto 30 días**; si no, agenda la **valoración de ingreso gratis**.
 - **Stack:** Astro 7 estático → Vercel (equipo Parceros, plan Pro). Dominio en GoDaddy.
-- ⚠️ **Hasta publicar en Vercel, `main` sigue siendo la web vieja en GitHub Pages.** Hacer merge de esta rama a
-  `main` antes de mover el DNS **rompe la web en línea**, porque Pages serviría el código fuente sin compilar.
-- ⛔ **Hacer merge a `main` y cambiar DNS lo aprueba Andrés.** Todo el trabajo va en `web-nueva-version`.
+- **Publicada el 15-sep-2026** en https://gimnasiobodypeople.com: DNS de GoDaddy → Vercel; `main` = producción.
+- ⛔ **Publicar sigue siendo decisión de Andrés:** cambios en ramas con PR. Hasta conectar Vercel con GitHub,
+  producción se despliega a mano desde `main` con `vercel deploy --prod --scope parceros`.
 
 ## Reglas transversales
 
