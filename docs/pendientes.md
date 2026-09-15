@@ -120,10 +120,11 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
    dominio ya exista en alguna cuenta. Revisar, enviar `https://gimnasiobodypeople.com/sitemap.xml` y enlazar con
    GA4.
 5. **GA4:** crear la propiedad y pegar el ID en `medicion.ga4` (ver propuesta arriba).
-6. **PR opcional `rendimiento-lcp`:**
-   - la foto del hero pasa a decodificación síncrona y el Pixel carga en un momento libre del navegador;
-   - en local no cambia nada medible. **Mergearlo publica en producción**; después, medir con Lighthouse y comparar
-     contra 95–96 / LCP 2,7–2,8 s.
+6. ✅ **Rendimiento resuelto** (15-sep-2026, PR #2 y #3):
+   - el Meta Pixel carga con `requestIdleCallback` (a más tardar 3,5 s) → la espera de pintado del hero bajó;
+   - `decoding="sync"` en la foto del hero **empeoraba** (92–94, LCP 2,9–3,1 s), así que se quitó (PR #3);
+   - **medido sobre gimnasiobodypeople.com, 3 corridas en celular: 100 / 100 / 100 / 100, LCP 1,6–1,8 s,
+     TBT 20–40 ms.**
 7. Contenido pendiente:
    - permiso para las reseñas;
    - duración de la valoración;
@@ -152,8 +153,8 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
   4. **Merge:** PR https://github.com/andrestntx/body-people/pull/1 mergeado en `main` (513a1ee).
   5. **GitHub Pages:** ✅ apagado. El repo se transfirió a `parcerosmx` y quedó conectado a Vercel.
 - **Lighthouse en celular sobre el dominio publicado** (3 corridas):
-  - rendimiento 95–96, accesibilidad 100, buenas prácticas 100, SEO 100;
-  - LCP 2,7–2,8 s (1 s de espera de pintado que en local no aparece), TBT 50–70 ms, 252 KB;
+  - al publicar: 95–96 / 100 / 100 / 100, LCP 2,7–2,8 s;
+  - **tras PR #2 y #3: 100 / 100 / 100 / 100, LCP 1,6–1,8 s, TBT 20–40 ms**;
   - antes: 74, 78, 93 y 92, LCP 5,3 s, 3,99 MB.
 - **Meta Pixel:** no se pudo ver el envío real. Los navegadores automatizados no envían, y en el Chrome de Andrés
   la librería no cargó (bloqueador). Queda el paso 3 de arriba.

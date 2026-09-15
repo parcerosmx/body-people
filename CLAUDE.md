@@ -31,6 +31,8 @@
 - **Reglas de Meta para textos del reto:** no prometer kilos, nada de antes y después, no aludir al cuerpo.
 - **Celular primero.** Meta de Lighthouse en celular: ≥ 90 en rendimiento, SEO y accesibilidad.
 - **Nada depende de una animación para verse.** Hero sin video; fotos con `<Picture>` (AVIF/WebP).
+- ⚠️ **No usar `decoding="sync"` en la foto del hero:** medido, empeora el LCP. El Pixel se carga con
+  `requestIdleCallback`; así la web marca 100 en Lighthouse en celular.
 
 ## Comandos
 
