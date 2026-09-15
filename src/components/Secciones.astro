@@ -1,0 +1,321 @@
+---
+/**
+ * Secciones del home después del hero.
+ * Entrega 2: esqueleto con contenido verificado. Entrega 3: diseño fino, reseñas reales, schema y medición.
+ * Regla: nada inventado. Lo que falta está marcado con «PENDIENTE» en un comentario.
+ */
+import { Picture } from "astro:assets";
+import IconoWhatsApp from "./IconoWhatsApp.astro";
+import {
+  negocio, pesos, whatsapp, mensajeObjetivo, MENSAJES, DIAS, franjasTexto,
+  direccionCompleta, comoLlegar, mapaFicha, telefonoHref,
+} from "../lib/negocio";
+import fachada from "../assets/fotos/fachada.jpg";
+
+const fotos = import.meta.glob<{ default: ImageMetadata }>("../assets/fotos/*.jpg", { eager: true });
+const foto = (n: string) => fotos[`../assets/fotos/${n}.jpg`].default;
+const galeria = [
+  { src: foto("zona-maquinas"), alt: "Zona de máquinas de Body People vista desde el segundo piso" },
+  { src: foto("entrenamiento-cajon"), alt: "Entrenamiento con cajón y acompañamiento del entrenador" },
+  { src: foto("mancuernas"), alt: "Socia entrenando con mancuernas" },
+  { src: foto("entrenamiento-grupal"), alt: "Entrenamiento grupal de zancadas con mancuernas" },
+  { src: foto("caminadoras"), alt: "Caminadoras de la zona de cardio" },
+  { src: foto("trx"), alt: "Entrenamiento funcional con TRX" },
+  { src: foto("maquinas-pierna"), alt: "Máquinas para pierna" },
+  { src: foto("polea-acompanamiento"), alt: "Ejercicio en polea con acompañamiento" },
+];
+
+const { reto, precios, entrenador, direccion, horario, contacto, google } = negocio;
+const nombreDia: Record<string, string> = { lunes: "Lunes", martes: "Martes", miercoles: "Miércoles", jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo" };
+const semanaIgual = ["martes", "miercoles", "jueves", "viernes"].every((d) => JSON.stringify(horario[d as keyof typeof horario]) === JSON.stringify(horario.lunes));
+const filasHorario = semanaIgual
+  ? [{ dia: "Lunes a viernes", franjas: horario.lunes }, { dia: "Sábado", franjas: horario.sabado }, { dia: "Domingo", franjas: horario.domingo }, { dia: "Festivos", franjas: horario.festivo }]
+  : [...DIAS.map((d) => ({ dia: nombreDia[d], franjas: horario[d] })), { dia: "Festivos", franjas: horario.festivo }];
+
+const metodo = [
+  { titulo: "Valoración de ingreso", texto: "Conocemos tus objetivos, tu estilo de vida y tus medidas iniciales, para que el plan se adapte a ti." },
+  { titulo: "Plan de entrenamiento", texto: "Diseñado según tus objetivos, con un periodo de adaptación para evitar lesiones y dolores innecesarios." },
+  { titulo: "Plan nutricional", texto: "Se adapta a tu estilo de vida y tus gustos. No necesitas dietas difíciles ni castigarte." },
+  { titulo: "Control mensual", texto: "Cada mes evaluamos tu avance y ajustamos el plan a tus nuevas metas." },
+];
+
+const preguntas = [
+  {
+    p: "¿Cuánto cuesta?",
+    r: `La mensualidad es de ${pesos(precios.mensualidad)}. El primer mes cuesta ${pesos(precios.primer_mes)} porque incluye la inscripción.${reto.activo ? ` Ahora mismo también está el ${reto.nombre} por ${pesos(reto.precio)}.` : ""} La valoración de ingreso es gratis.`,
+  },
+  { p: "Nunca he ido a un gimnasio, ¿es para mí?", r: "Sí. La atención es semipersonalizada y empiezas con un periodo de adaptación, para aprender y entrenar sin lesionarte.", intencion: "desde_cero" as const },
+  { p: "¿Qué hacen en la valoración de ingreso?", r: "Revisamos tus objetivos, tu estilo de vida y tus medidas. Con eso se arma tu plan de entrenamiento y tu plan nutricional." },
+  { p: `¿Hay ${negocio.no_ofrece.map((s) => s.toLowerCase()).join(" o ")}?`, r: `No. Lo que sí hay: ${negocio.servicios.map((s) => s.toLowerCase()).join(", ")}.` },
+  { p: "¿Tienen parqueadero?", r: `Sí, ${negocio.comodidades.find((c) => /parqueadero/i.test(c))?.toLowerCase() ?? "parqueadero"}. También Wi-Fi gratis, baños y entrada accesible.` },
+  { p: "¿Cómo puedo pagar?", r: "Con tarjeta débito y crédito." },
+  { p: "¿Abren los festivos?", r: `Sí, los festivos abrimos de ${franjasTexto(horario.festivo)}.` },
+  // PENDIENTE (Andrés): ¿la mensualidad normal tiene permanencia? ¿Qué llevar a la valoración? ¿A qué hora hay menos gente?
+];
+---
+
+<!-- ¿Qué quieres lograr? — un toque abre WhatsApp con el objetivo escrito -->
+<section class="seccion seccion--suelo" id="objetivos" aria-labelledby="objetivos-titulo">
+  <div class="contenedor">
+    <div class="seccion__cabeza">
+      <p class="antetitulo">Programas</p>
+      <h2 id="objetivos-titulo">¿Qué quieres lograr?</h2>
+      <p>Toca tu objetivo y escríbeme por WhatsApp. El mensaje ya va escrito.</p>
+    </div>
+    <ul class="objetivos">
+      {negocio.programas.map((prog) => (
+        <li>
+          <a target="_blank" class="objetivo" href={whatsapp(mensajeObjetivo(prog))} data-intencion={`objetivo:${prog.id}`} data-ubicacion="objetivos" rel="noopener">
+            <span class="objetivo__nombre">{prog.nombre}</span>
+            <span class="objetivo__detalle">{prog.detalle}</span>
+            <span class="objetivo__accion"><IconoWhatsApp size={16} /> Escribir con este objetivo</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- Tu primera vez: el método como la ficha de la valoración -->
+<section class="seccion" id="metodo" aria-labelledby="metodo-titulo">
+  <div class="contenedor partida">
+    <div class="seccion__cabeza">
+      <p class="antetitulo">Tu primera vez</p>
+      <h2 id="metodo-titulo">Primero te conocemos. Después entrenas con plan.</h2>
+      <p>No llegas a adivinar qué máquina usar: sales de la valoración sabiendo qué hacer.</p>
+    </div>
+    <ol class="ficha">
+      {metodo.map((paso) => (
+        <li><h3>{paso.titulo}</h3><p>{paso.texto}</p></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<!-- Mariano y lo que dicen en Google -->
+<section class="seccion seccion--suelo" id="mariano" aria-labelledby="mariano-titulo">
+  <div class="contenedor partida">
+    <div class="seccion__cabeza">
+      <p class="antetitulo">Tu entrenador</p>
+      <h2 id="mariano-titulo">{entrenador.nombre}</h2>
+      <p>{entrenador.titulo}. {entrenador.trayectoria}. Es el dueño del gimnasio y atiende a sus socios en el día a día.</p>
+      <div class="fila-botones mariano__acciones">
+        <a target="_blank" class="boton boton--secundario" href={whatsapp(MENSAJES.mariano)} data-intencion="mariano" data-ubicacion="mariano" rel="noopener"><IconoWhatsApp size={20} /> Escríbele a Mariano</a>
+      </div>
+    </div>
+    <div class="mariano">
+      <blockquote class="mariano__cita">
+        <p>«Como instructor y propietario de Body People busco que cumplas tus metas disfrutando de todo el proceso.»</p>
+        <footer>— {entrenador.nombre}</footer>
+      </blockquote>
+      <!-- PENDIENTE (Andrés): permiso para mostrar las reseñas de Google con nombre y fecha. Se copian tal cual, sin aggregateRating en el schema. -->
+      <div class="resenas" id="resenas">
+        <p class="resenas__nota"><span class="estrellas" aria-hidden="true">★★★★★</span> <strong>{google.calificacion}</strong> en Google</p>
+        <p class="resenas__texto">Lee lo que dicen los socios en la ficha de Google del gimnasio.</p>
+        <div class="fila-botones">
+          <a target="_blank" class="boton boton--secundario" href={mapaFicha()} rel="noopener">Ver reseñas en Google</a>
+          <a target="_blank" class="enlace-flecha" href={google.enlace_resenas} rel="noopener">¿Ya entrenas aquí? Deja tu reseña</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Precios -->
+<section class="seccion" id="precios" aria-labelledby="precios-titulo">
+  <div class="contenedor partida">
+    <div class="seccion__cabeza">
+      <p class="antetitulo">Precios</p>
+      <h2 id="precios-titulo">Lo que cuesta, sin letra chica</h2>
+      <p>La valoración de ingreso es gratis. Recibimos tarjeta débito y crédito.</p>
+    </div>
+    <div class="planes">
+      {reto.activo && (
+        <article class="plan plan--destacado">
+          <p class="plan__nombre">{reto.nombre}</p>
+          <p><span class="precio plan__precio">{pesos(reto.precio)}</span> <span class="plan__periodo">el mes</span></p>
+          <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
+          <p class="plan__nota">Si sigues, tu mensualidad queda congelada en {pesos(reto.continuidad)}.</p>
+          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero un cupo</a>
+        </article>
+      )}
+      <article class="plan">
+        <p class="plan__nombre">Mensualidad</p>
+        <p><span class="precio plan__precio">{pesos(precios.mensualidad)}</span> <span class="plan__periodo">al mes</span></p>
+        <ul class="lista-check">
+          <li>Valoración de ingreso gratis</li>
+          <li>Plan de entrenamiento personalizado</li>
+          <li>Plan nutricional</li>
+          <li>Control de progreso mensual</li>
+          <li>Clases grupales, funcional y TRX</li>
+        </ul>
+        <p class="plan__nota">El primer mes cuesta {pesos(precios.primer_mes)} porque incluye la inscripción.</p>
+        <a target="_blank" class={`boton ${reto.activo ? "boton--secundario" : "boton--principal"} boton--ancho`} href={whatsapp(MENSAJES.precios)} data-intencion="precios" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Agendar mi valoración gratis</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Galería -->
+<section class="seccion seccion--suelo" id="gimnasio" aria-labelledby="gimnasio-titulo">
+  <div class="contenedor">
+    <div class="seccion__cabeza">
+      <p class="antetitulo">El gimnasio</p>
+      <h2 id="gimnasio-titulo">Así es por dentro</h2>
+      <p>{negocio.servicios.join(" · ")}</p>
+    </div>
+  </div>
+  <ul class="galeria" aria-label="Fotos del gimnasio">
+    {galeria.map((f) => (
+      <li><Picture src={f.src} formats={["avif", "webp"]} widths={[360, 720]} sizes="(min-width: 760px) 420px, 82vw" alt={f.alt} loading="lazy" /></li>
+    ))}
+  </ul>
+</section>
+
+<!-- Horario y ubicación -->
+<section class="seccion" id="horario" aria-labelledby="horario-titulo">
+  <div class="contenedor ubicacion">
+    <div>
+      <div class="seccion__cabeza">
+        <p class="antetitulo">Horario y ubicación</p>
+        <h2 id="horario-titulo">Te esperamos en el Amarilo</h2>
+      </div>
+      <table class="horario">
+        <caption class="visualmente-oculto">Horario de atención</caption>
+        <tbody>
+          {filasHorario.map((f) => <tr><th scope="row">{f.dia}</th><td>{franjasTexto(f.franjas)}</td></tr>)}
+        </tbody>
+      </table>
+      <address class="direccion">
+        <strong>{direccion.calle}</strong><br />
+        {direccion.sector[0].toUpperCase() + direccion.sector.slice(1)}, {direccion.ciudad}, {direccion.departamento}<br />
+        <span>{direccion.referencia}</span>
+      </address>
+      <ul class="comodidades">{negocio.comodidades.map((c) => <li>{c}</li>)}</ul>
+      <div class="fila-botones">
+        <a target="_blank" class="boton boton--principal" href={comoLlegar()} rel="noopener" data-intencion="como_llegar" data-ubicacion="horario">Cómo llegar</a>
+        <a class="boton boton--secundario" href={telefonoHref()} data-intencion="llamar" data-ubicacion="horario">Llamar {contacto.telefono.replace("+57 ", "")}</a>
+        <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES.horario)} data-intencion="horario" data-ubicacion="horario" rel="noopener">¿Qué horario me recomiendas?</a>
+      </div>
+    </div>
+    <figure class="fachada">
+      <Picture src={fachada} formats={["avif", "webp"]} widths={[480, 900]} sizes="(min-width: 960px) 520px, 100vw" alt={`Fachada de ${negocio.nombre} en la ${direccion.calle}`} loading="lazy" />
+      <figcaption>Así se ve el local desde la calle.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- Preguntas frecuentes -->
+<section class="seccion seccion--suelo" id="preguntas" aria-labelledby="preguntas-titulo">
+  <div class="contenedor partida">
+    <div class="seccion__cabeza">
+      <p class="antetitulo">Preguntas frecuentes</p>
+      <h2 id="preguntas-titulo">Lo que más nos preguntan</h2>
+    </div>
+    <div class="acordeon">
+      {preguntas.map((q) => (
+        <details>
+          <summary>{q.p}</summary>
+          <p>{q.r}</p>
+          {q.intencion && <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES[q.intencion])} data-intencion={q.intencion} data-ubicacion="preguntas" rel="noopener">Escríbenos y te contamos cómo empezar</a>}
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Cierre -->
+<section class="cierre" aria-labelledby="cierre-titulo">
+  <div class="contenedor cierre__caja">
+    <h2 id="cierre-titulo">{reto.activo ? `Empieza el ${reto.nombre}` : "Empieza con tu valoración gratis"}</h2>
+    <p>Escríbenos por WhatsApp y agendamos tu valoración de ingreso.</p>
+    <a target="_blank" class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre" rel="noopener"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero un cupo del reto" : "Agendar mi valoración gratis"}</a>
+  </div>
+</section>
+
+
+<style>
+  .fila-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+
+  .objetivos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .objetivo { display: grid; gap: 6px; height: 100%; padding: 18px; border-radius: var(--radio); background: var(--papel); text-decoration: none; box-shadow: 0 0 0 1px var(--linea); transition: box-shadow .15s ease; }
+  .objetivo:hover { box-shadow: 0 0 0 2px var(--tinta); }
+  .objetivo__nombre { font-weight: 700; font-stretch: 85%; font-size: var(--t-l); line-height: 1.15; }
+  .objetivo__detalle { color: var(--tinta-2); font-size: var(--t-s); }
+  .objetivo__accion { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: var(--t-s); font-weight: 650; color: var(--rojo); }
+
+  .ficha { list-style: none; margin: 0; padding: 0; counter-reset: paso; border-top: 3px solid var(--cinta); }
+  .ficha li { counter-increment: paso; display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; row-gap: 4px; padding: 18px 0; border-bottom: 1px dashed var(--linea); }
+  .ficha li::before { content: counter(paso, decimal-leading-zero); grid-row: span 2; font-family: var(--cifra); font-weight: 900; font-size: 1.9rem; line-height: 0.9; color: var(--tinta); }
+  .ficha p { color: var(--tinta-2); font-size: var(--t-s); }
+
+  .mariano__acciones { margin-top: 8px; }
+  .mariano { display: grid; gap: 20px; }
+  .mariano__cita { margin: 0; padding: 26px 24px; border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
+  .mariano__cita p { font-size: clamp(var(--t-l), 1rem + 1.2vw, var(--t-xl)); font-stretch: 85%; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+  .mariano__cita footer { margin-top: 14px; font-size: var(--t-s); color: var(--tenue); }
+  .resenas { display: grid; gap: 10px; padding: 22px 24px; border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
+  .resenas__nota { font-size: var(--t-l); }
+  .resenas__nota strong { font-family: var(--cifra); font-weight: 900; font-size: 2rem; vertical-align: -3px; margin-inline: 4px 2px; }
+  .resenas__texto { color: var(--tinta-2); font-size: var(--t-s); margin-bottom: 6px; }
+
+  .planes { display: grid; gap: 16px; }
+  .plan { display: grid; gap: 14px; align-content: start; padding: 22px; border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
+  .plan--destacado { box-shadow: 0 0 0 2px var(--rojo), var(--sombra); }
+  .plan__nombre { font-weight: 700; font-stretch: 85%; font-size: var(--t-l); }
+  .plan__precio { font-size: 3rem; }
+  .plan__periodo { color: var(--tenue); font-size: var(--t-s); }
+  .plan .lista-check { font-size: var(--t-s); }
+  .plan__nota { font-size: var(--t-xs); color: var(--tenue); }
+  .plan .boton { font-size: var(--t-s); padding-inline: 14px; }
+
+  .galeria { list-style: none; margin: 0; padding: 0 var(--gutter) 6px; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); }
+  .galeria li { flex: 0 0 82vw; max-width: 420px; scroll-snap-align: start; }
+  .galeria :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radio); }
+
+  .ubicacion { display: grid; gap: 28px; align-items: start; }
+  .horario { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; margin-bottom: 20px; }
+  .horario th, .horario td { text-align: left; padding: 10px 0; border-bottom: 1px solid var(--linea); vertical-align: top; font-size: var(--t-s); }
+  .horario th { font-weight: 650; padding-right: 16px; white-space: nowrap; }
+  .direccion { font-style: normal; margin-bottom: 14px; }
+  .direccion span { color: var(--tenue); font-size: var(--t-s); }
+  .comodidades { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .comodidades li { font-size: var(--t-xs); font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
+  .fachada { margin: 0; }
+  .fachada :global(img) { width: 100%; border-radius: var(--radio); aspect-ratio: 3 / 2; object-fit: cover; }
+  .fachada figcaption { font-size: var(--t-xs); color: var(--tenue); margin-top: 8px; }
+
+  .acordeon { border-top: 1px solid var(--linea); }
+  .acordeon details { border-bottom: 1px solid var(--linea); }
+  .acordeon summary { cursor: pointer; list-style: none; padding: 18px 36px 18px 0; font-weight: 650; position: relative; }
+  .acordeon summary::-webkit-details-marker { display: none; }
+  .acordeon summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; font-weight: 400; color: var(--tenue); }
+  .acordeon details[open] summary::after { content: "–"; }
+  .acordeon details p { padding: 0 0 12px; color: var(--tinta-2); }
+  .acordeon details .enlace-flecha { display: inline-block; margin-bottom: 18px; font-size: var(--t-s); }
+
+  .cierre { background: var(--marca); color: #fff; padding-block: 56px; }
+  .cierre__caja { display: grid; gap: 14px; justify-items: start; }
+  .cierre .boton--principal { background: #fff; color: var(--tinta); }
+  .cierre .boton--principal svg { color: #1faf38; }
+
+
+  @media (min-width: 760px) {
+    .objetivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .planes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 960px) {
+    .objetivos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    /* Galería: cuadrícula dentro del contenedor, sin carrusel. */
+    .galeria {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; overflow: visible;
+      max-width: var(--ancho); margin-inline: auto; padding: 0 var(--gutter);
+    }
+    .galeria li { max-width: none; }
+    .ubicacion { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; }
+    .fachada :global(img) { aspect-ratio: 4 / 3; }
+    .cierre__caja { grid-template-columns: 1fr auto; align-items: center; column-gap: 40px; }
+    .cierre__caja .boton { grid-column: 2; grid-row: 1 / span 2; }
+    .cierre h2 { font-size: 2.75rem; }
+  }
+</style>

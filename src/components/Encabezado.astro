@@ -1,0 +1,50 @@
+---
+import logo from "../assets/marca/logo-body-people.svg?url";
+import IconoWhatsApp from "./IconoWhatsApp.astro";
+import { negocio, whatsapp, MENSAJES } from "../lib/negocio";
+
+const mensaje = negocio.reto.activo ? MENSAJES.reto : MENSAJES.valoracion;
+---
+<header class="encabezado">
+  <div class="contenedor encabezado__fila">
+    <a class="encabezado__marca" href="/" aria-label={`${negocio.nombre}, inicio`}>
+      <img src={logo} alt="" width="106" height="40" />
+    </a>
+    <nav class="encabezado__nav" aria-label="Secciones">
+      <a href="#precios">Precios</a>
+      <a href="#horario">Horario</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <a target="_blank" class="encabezado__wa" href={whatsapp(mensaje)} data-intencion={negocio.reto.activo ? "reto" : "valoracion"} data-ubicacion="encabezado" rel="noopener">
+      <IconoWhatsApp size={20} />
+      <span class="solo-movil">Escríbenos</span>
+      <span class="solo-escritorio">{negocio.reto.activo ? `Quiero un cupo del ${negocio.reto.nombre}` : "Agendar mi valoración gratis"}</span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .encabezado { position: absolute; inset: 0 0 auto; z-index: 5; }
+  .encabezado__fila { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+  .encabezado__marca { display: inline-flex; background: var(--marca); padding: 8px 12px; border-radius: 10px; box-shadow: var(--sombra); }
+  .encabezado__marca img { height: 26px; width: auto; }
+  .encabezado__nav { display: none; }
+  .encabezado__wa {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border-radius: 999px;
+    background: var(--papel); color: var(--tinta); font-weight: 650; font-size: var(--t-s); text-decoration: none; box-shadow: var(--sombra);
+  }
+  .encabezado__wa svg { color: #1faf38; }
+  .solo-escritorio { display: none; }
+  @media (min-width: 960px) {
+    .encabezado { position: sticky; top: 0; background: rgb(255 255 255 / 0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--linea); }
+    .encabezado__fila { min-height: var(--encabezado-alto); padding-block: 12px; }
+    .encabezado__nav { display: flex; gap: 32px; margin-left: auto; font-weight: 600; font-size: var(--t-s); }
+    .encabezado__nav a { text-decoration: none; color: var(--tinta-2); }
+    .encabezado__nav a:hover { color: var(--tinta); }
+    .encabezado__wa { background: var(--rojo); color: #fff; box-shadow: none; padding: 10px 18px; }
+    .encabezado__wa:hover { background: var(--rojo-hover); }
+    .encabezado__wa svg { color: #fff; }
+    .solo-movil { display: none; }
+    .solo-escritorio { display: inline; }
+  }
+</style>

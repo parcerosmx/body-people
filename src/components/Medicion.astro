@@ -1,0 +1,55 @@
+---
+/**
+ * Medición: Meta Pixel y, si hay ID, Google Analytics 4.
+ *
+ * - Las librerías se cargan DESPUÉS de que la página terminó de cargar, para no frenar el celular.
+ *   Mientras tanto, una cola guarda PageView y los clics.
+ * - Cada enlace con data-intencion y data-ubicacion manda un evento al tocarlo:
+ *     Meta:  WhatsApp y llamada → Contact · «Cómo llegar» → FindLocation
+ *            (definiciones oficiales: Contact = iniciar contacto por teléfono o chat; Lead = registro completado).
+ *     GA4:   WhatsApp y llamada → generate_lead · «Cómo llegar» → como_llegar
+ *     Parámetros: intencion (reto, valoracion, precios, objetivo:…) y ubicacion (hero, barra-fija, precios…).
+ */
+import { negocio } from "../lib/negocio";
+const { pixel_meta: pixel, ga4 } = negocio.medicion;
+---
+{pixel && (
+  <noscript><img height="1" width="1" style="display:none" alt="" src={`https://www.facebook.com/tr?id=${pixel}&ev=PageView&noscript=1`} /></noscript>
+)}
+{(pixel || ga4) && (
+  <script is:inline define:vars={{ pixel, ga4 }}>
+    (function () {
+      if (pixel) {
+        var f = (window.fbq = function () { f.callMethod ? f.callMethod.apply(f, arguments) : f.queue.push(arguments); });
+        if (!window._fbq) window._fbq = f;
+        f.push = f; f.loaded = true; f.version = "2.0"; f.queue = [];
+        fbq("init", pixel);
+        fbq("track", "PageView");
+      }
+      if (ga4) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag("js", new Date());
+        gtag("config", ga4);
+      }
+
+      function cargar(src) { var s = document.createElement("script"); s.async = true; s.src = src; document.head.appendChild(s); }
+      function cargarLibrerias() {
+        if (pixel) cargar("https://connect.facebook.net/en_US/fbevents.js");
+        if (ga4) cargar("https://www.googletagmanager.com/gtag/js?id=" + ga4);
+      }
+      if (document.readyState === "complete") setTimeout(cargarLibrerias, 0);
+      else addEventListener("load", function () { setTimeout(cargarLibrerias, 0); });
+
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest && e.target.closest("a[data-intencion]");
+        if (!a) return;
+        var intencion = a.getAttribute("data-intencion");
+        var ubicacion = a.getAttribute("data-ubicacion") || "";
+        var canal = a.href.indexOf("wa.me/") > -1 ? "whatsapp" : a.href.indexOf("tel:") === 0 ? "telefono" : "mapa";
+        if (window.fbq) fbq("track", canal === "mapa" ? "FindLocation" : "Contact", { content_name: intencion, content_category: ubicacion });
+        if (window.gtag) gtag("event", canal === "mapa" ? "como_llegar" : "generate_lead", { intencion: intencion, ubicacion: ubicacion, canal: canal });
+      });
+    })();
+  </script>
+)}

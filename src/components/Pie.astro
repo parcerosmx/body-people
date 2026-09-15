@@ -1,0 +1,27 @@
+---
+import { negocio, direccionCompleta, telefonoHref, mapaFicha } from "../lib/negocio";
+const { contacto } = negocio;
+---
+<footer class="pie">
+  <div class="contenedor pie__fila">
+    <div>
+      <p><strong>{negocio.nombre}</strong></p>
+      <p>{direccionCompleta()}</p>
+      <p><a href={telefonoHref()} data-intencion="llamar" data-ubicacion="pie">{contacto.telefono}</a></p>
+    </div>
+    <ul class="pie__enlaces">
+      <li><a target="_blank" href={contacto.instagram} rel="noopener">Instagram</a></li>
+      <li><a target="_blank" href={contacto.facebook} rel="noopener">Facebook</a></li>
+      <li><a target="_blank" href={mapaFicha()} rel="noopener">Google Maps</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .pie { padding-block: 32px; font-size: var(--t-s); color: var(--tinta-2); }
+  .pie__fila { display: grid; gap: 16px; }
+  .pie__enlaces { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 16px; }
+  @media (min-width: 760px) {
+    .pie__fila { grid-template-columns: 1fr auto; align-items: end; }
+  }
+</style>
