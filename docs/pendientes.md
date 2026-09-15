@@ -42,9 +42,22 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 2 de 4** (sistema visual, her
     todo con datos verificados.
   - Fotos con `<Picture>` en AVIF/WebP; favicon y apple-touch-icon con la «B».
 
+### Revisión de escritorio (15-sep-2026, pedida por Andrés: «en el computador no se ve bien»)
+
+- **Hero:** foto 4:5 redondeada dentro del contenedor. Antes estaba estirada y solo se veía la cara.
+- **Encabezado fijo** en escritorio con el botón rojo del reto; la barra flotante queda solo en celular.
+- **Método, Mariano (con la tarjeta de reseñas), precios y preguntas:** título fijo a la izquierda y contenido a la
+  derecha (`.partida` en `global.css`).
+- **Galería:** cuadrícula de 4×2 en escritorio y carrusel en celular.
+- **Revisado en:**
+  - 1440×900: página completa;
+  - 1280×800: el hero entra entero con el botón a la vista;
+  - celular 390×844: el nombre del reto va como etiqueta sobre el precio.
+- ⏳ **Esperando el visto bueno de Andrés** sobre el preview antes de seguir.
+
 ## ▶️ Entrega 3 — qué sigue
 
-1. Diseño fino de las secciones del esqueleto (hoy funcionales pero sobrias) y revisión en escritorio.
+1. Ajustes que pida Andrés al revisar el preview; diseño fino restante.
 2. **Reseñas reales** de Google, copiadas tal cual con nombre y fecha, si Andrés da permiso.
 3. **Schema `ExerciseGym`** completo:
    - NAP idéntico a Google, `geo`, `openingHoursSpecification` con el descanso de 2 a 4 y festivos;
