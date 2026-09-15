@@ -20,7 +20,7 @@ export interface Negocio {
     activo: boolean; nombre: string; lema: string; precio: number; incluye_inscripcion: boolean;
     sin_permanencia: boolean; personas_por_grupo: number; incluye: string[]; comparacion: string; garantia: string;
   };
-  programas: { id: string; nombre: string; corto: string; detalle: string }[];
+  programas: { id: string; nombre: string; corto: string; detalle: string; imagen: string; imagen_ia: boolean }[];
   servicios: string[];
   no_ofrece: string[];
   comodidades: string[];

@@ -12,8 +12,8 @@ import {
 } from "../lib/negocio";
 import fachada from "../assets/fotos/fachada.jpg";
 
-const fotos = import.meta.glob<{ default: ImageMetadata }>("../assets/fotos/*.jpg", { eager: true });
-const foto = (n: string) => fotos[`../assets/fotos/${n}.jpg`].default;
+const fotos = import.meta.glob<{ default: ImageMetadata }>("../assets/fotos/*.{jpg,webp}", { eager: true });
+const foto = (n: string) => (fotos[`../assets/fotos/${n}`] ?? fotos[`../assets/fotos/${n}.jpg`]).default;
 const galeria = [
   { src: foto("zona-maquinas"), alt: "Zona de máquinas de Body People vista desde el segundo piso" },
   { src: foto("entrenamiento-cajon"), alt: "Entrenamiento con cajón y acompañamiento del entrenador" },
@@ -75,6 +75,10 @@ const preguntas = [
       {negocio.programas.map((prog) => (
         <li>
           <a target="_blank" class="objetivo" href={whatsapp(mensajeObjetivo(prog))} data-intencion={`objetivo:${prog.id}`} data-ubicacion="objetivos" rel="noopener">
+            <span class="objetivo__foto">
+              <Picture src={foto(prog.imagen)} formats={["avif", "webp"]} widths={[320, 640]} sizes="(min-width: 960px) 270px, (min-width: 760px) 45vw, 90vw" alt={prog.imagen_ia ? `Imagen ilustrativa: persona entrenando para ${prog.nombre.toLowerCase()} en un gimnasio como Body People` : `${entrenador.nombre} acompañando un entrenamiento en Body People`} loading="lazy" />
+              {prog.imagen_ia && <span class="objetivo__rotulo">Imagen ilustrativa generada con IA</span>}
+            </span>
             <span class="objetivo__nombre">{prog.nombre}</span>
             <span class="objetivo__detalle">{prog.detalle}</span>
             <span class="objetivo__accion"><IconoWhatsApp size={16} /> Escribir con este objetivo</span>
@@ -248,8 +252,12 @@ const preguntas = [
   .fila-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
 
   .objetivos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .objetivo { display: grid; gap: 6px; height: 100%; padding: 18px; border-radius: var(--radio); background: var(--papel); text-decoration: none; box-shadow: 0 0 0 1px var(--linea); transition: box-shadow .15s ease; }
+  .objetivo { display: grid; gap: 6px; align-content: start; height: 100%; padding: 0 0 18px; overflow: hidden; border-radius: var(--radio); background: var(--papel); text-decoration: none; box-shadow: 0 0 0 1px var(--linea); transition: box-shadow .15s ease; }
   .objetivo:hover { box-shadow: 0 0 0 2px var(--tinta); }
+  .objetivo > span:not(.objetivo__foto) { padding-inline: 18px; }
+  .objetivo__foto { position: relative; display: block; margin-bottom: 10px; }
+  .objetivo__foto :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .objetivo__rotulo { position: absolute; right: 8px; bottom: 8px; padding: 2px 7px; border-radius: 4px; background: rgb(22 24 28 / 0.62); color: #fff; font-size: 10.5px; font-weight: 500; letter-spacing: 0.01em; }
   .objetivo__nombre { font-weight: 700; font-stretch: 85%; font-size: var(--t-l); line-height: 1.15; }
   .objetivo__detalle { color: var(--tinta-2); font-size: var(--t-s); }
   .objetivo__accion { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: var(--t-s); font-weight: 650; color: var(--rojo); }

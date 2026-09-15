@@ -122,6 +122,17 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
   Vive en `reto.comparacion` y se apaga dejándola vacía.
 - **Hero nuevo:** «Te reto a empezar. Yo te acompaño.» Sección nueva **«No hay excusas»**
   (`src/components/Excusas.astro`) con cada excusa tachada: costo, motivación y «¿y si no funciona?».
+- **Imágenes en las tarjetas de objetivos** (investigación con fuentes: gente real e identificable, entrenando,
+  sin cuerpos de modelo ni «resultados»):
+  - bajar de peso, piernas y glúteos, y masa muscular: **generadas con GPT Image 2.5 en Higgsfield** (CLI
+    `higgsfield`, cuenta contacto@parceros.mx), usando fotos reales del gimnasio como escenario;
+  - llevan el rótulo **«Imagen ilustrativa generada con IA»** (`imagen_ia: true` en `negocio.yml`) y nunca se
+    presentan como socios ni resultados;
+  - «Empezar desde cero»: foto **real** de Mariano acompañando;
+  - originales, 9 variantes y prompts: `~/src/claude-ia/bodypeople-maps/fotos/ia-objetivos/`.
+  - Ideal a futuro: reemplazarlas por una sesión corta con socios reales de 30 a 50 años, con su permiso.
+- ⚠️ **La garantía obliga** (Ley 1480, art. 29): «no se cumplen tus objetivos» tiene que quedar medible y por
+  escrito en la valoración de cada persona.
 - La imagen para compartir dice «No hay excusas · Solo 25 personas»: **regenerarla si se apaga el reto**
   (`scripts/og/generar.py`).
 - ⚠️ **El guion del video** (`bodypeople-maps/video-reto-30-dias.md`) todavía dice $99.900, 12 sesiones y plan de

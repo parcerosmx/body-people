@@ -91,20 +91,29 @@ reto:
   # Si se deja vacío (garantia: ""), la web no la muestra.
   garantia: Si entrenas mínimo 3 veces por semana y no se cumplen tus objetivos, el segundo mes es gratis.
 
+# imagen_ia: true muestra el rótulo «Imagen ilustrativa generada con IA». Nunca presentarlas como socios ni resultados.
 programas:
   - id: bajar-de-peso
+    imagen: ia-bajar-de-peso.webp # en src/assets/fotos/
+    imagen_ia: true
     nombre: Bajar de peso y quemar grasa
     corto: Bajar de peso
     detalle: Circuitos y rutinas de fuerza para quemar grasa de forma progresiva.
   - id: piernas-gluteos
+    imagen: ia-piernas-gluteos.webp # en src/assets/fotos/
+    imagen_ia: true
     nombre: Tonificar piernas y glúteos
     corto: Piernas y glúteos
     detalle: Ganancia muscular enfocada en piernas y glúteos, dentro de tu plan de entrenamiento.
   - id: masa-muscular
+    imagen: ia-masa-muscular.webp # en src/assets/fotos/
+    imagen_ia: true
     nombre: Ganar masa muscular
     corto: Ganar músculo
     detalle: Plan de fuerza progresivo para cuidar y aumentar tu masa muscular.
   - id: desde-cero
+    imagen: entrenamiento-cajon.jpg # en src/assets/fotos/
+    imagen_ia: false
     nombre: Empezar desde cero
     corto: Empezar desde cero
     detalle: Periodo de adaptación para aprender las máquinas y entrenar sin lesionarte.
