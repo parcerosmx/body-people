@@ -1,6 +1,6 @@
 # Pendientes — web nueva de Body People
 
-Actualizado el 15-sep-2026, al cerrar la **entrega 3 de 4** (SEO, schema y medición).
+Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva está publicada en https://gimnasiobodypeople.com** (Vercel).
 
 ## Plan de entregas
 
@@ -9,7 +9,7 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 3 de 4** (SEO, schema y medic
 | 1 | Investigación y auditoría de la web actual → Artifact | ✅ 15-sep-2026 |
 | 2 | Sistema visual, stack, hero y esqueleto en celular, imágenes optimizadas | ✅ 15-sep-2026 |
 | 3 | Schema, og:image, robots y sitemap, Meta Pixel por intención, GA4 y Search Console listos, detalles | ✅ 15-sep-2026 |
-| 4 | Verificación (Rich Results, eventos de Meta), antes y después, dominio y DNS en Vercel, merge con aprobación | ⏭️ siguiente |
+| 4 | Verificación, antes y después, dominio y DNS en Vercel, merge | ✅ 15-sep-2026 (quedan 2 pasos que necesitan la cuenta andrestntx) |
 
 ## Entrega 2 — en qué quedó
 
@@ -103,20 +103,60 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 3 de 4** (SEO, schema y medic
    - registrar `intencion`, `ubicacion` y `canal` como dimensiones personalizadas de evento.
 3. **Enlazar Search Console con GA4** para ver búsquedas y conversiones juntas.
 
-## ▶️ Entrega 4 — qué sigue
+## ▶️ Lo que queda (en orden)
 
-1. **Rich Results Test y validator.schema.org** sobre el preview (el schema está en el HTML).
-2. **Meta:** confirmar en «Probar eventos» que llegan `PageView`, `Contact` y `FindLocation` con sus parámetros.
-3. Revisar en un celular real los enlaces de WhatsApp, llamada y «Cómo llegar».
-4. **Capturas del antes y el después** (celular y escritorio).
-5. **Publicar, con aprobación de Andrés en cada paso:**
-   1. agregar `gimnasiobodypeople.com` y `www` al proyecto de Vercel, con redirección de www al apex;
-   2. cambiar el DNS en GoDaddy;
-   3. verificar HTTPS en apex y www;
-   4. merge a `main`;
-   5. apagar GitHub Pages.
-6. Lighthouse sobre el dominio publicado, Search Console y sitemap.
-7. **Antes de publicar:** definir las medidas de la garantía del reto, o dejar `garantia: ""`.
+1. ✅ **GitHub Pages apagado** (15-sep-2026). La rama de origen quedó en «None» y `andrestntx.github.io/body-people` da 404.
+2. ✅ **Vercel conectado con GitHub** (15-sep-2026):
+   - el repo se **transfirió a `parcerosmx/body-people`** (decisión de Andrés), como `parceros-web` y `parceros-turnos`;
+   - `vercel git connect` quedó listo, con `main` como rama de producción: **todo push a `main` publica solo** y cada
+     rama o PR genera un preview protegido;
+   - limpieza opcional: desinstalar la app de Vercel de la cuenta `andrestntx` en github.com/settings/installations,
+     porque ya no tiene repos.
+3. **Meta:** en el Administrador de eventos → Pixel `989182581694959` → «Probar eventos»:
+   - abrir gimnasiobodypeople.com desde el celular;
+   - tocar WhatsApp y «Cómo llegar»;
+   - confirmar que llegan `PageView`, `Contact` y `FindLocation` con `content_name` y `content_category`.
+4. **Search Console:** el DNS ya tiene un TXT `google-site-verification=ULA3_…`, así que puede que la propiedad de
+   dominio ya exista en alguna cuenta. Revisar, enviar `https://gimnasiobodypeople.com/sitemap.xml` y enlazar con
+   GA4.
+5. **GA4:** crear la propiedad y pegar el ID en `medicion.ga4` (ver propuesta arriba).
+6. **PR opcional `rendimiento-lcp`:**
+   - la foto del hero pasa a decodificación síncrona y el Pixel carga en un momento libre del navegador;
+   - en local no cambia nada medible. **Mergearlo publica en producción**; después, medir con Lighthouse y comparar
+     contra 95–96 / LCP 2,7–2,8 s.
+7. Contenido pendiente:
+   - permiso para las reseñas;
+   - duración de la valoración;
+   - si Mariano responde el WhatsApp;
+   - la garantía, **publicada tal cual por decisión de Andrés**; conviene definir las medidas.
+
+## Entrega 4 — en qué quedó
+
+- **Verificación del schema:**
+  - validator.schema.org: `ExerciseGym` con **0 errores y 0 advertencias**;
+  - Rich Results Test de Google: **Empresas locales** y **Organización** válidas. Único aviso: falta `postalCode`,
+    que es opcional y no se inventa.
+- **Antes y después** (celular y escritorio): `~/src/claude-ia/bodypeople-maps/docs/web-investigacion/antes-despues/`.
+- **Publicación (aprobada por Andrés):**
+  1. **Vercel:** `gimnasiobodypeople.com` y `www.gimnasiobodypeople.com` agregados al proyecto `gimnasio-body-people`;
+     `www` redirige con 308 al apex.
+  2. **GoDaddy** (hecho en su Chrome), cambios:
+     - A `@`: `216.150.1.1` y `216.150.16.1`, que reemplazan las 4 IP de GitHub;
+     - CNAME `www`: `90e0ec60cc179dc9.vercel-dns-016.com.`
+     - Sin tocar: NS, SOA, `_domainconnect`, TXT de Google y TXT `_github-pages-challenge-andrestntx`.
+  3. **HTTPS:**
+     - Let's Encrypt emitido en 30 s (vence 14-dic-2026, Vercel lo renueva);
+     - `http` y `www` → 308 a `https://gimnasiobodypeople.com/`, con HSTS;
+     - `bodypeople.com.co` sigue redirigiendo;
+     - en el dominio real no hay `noindex`.
+  4. **Merge:** PR https://github.com/andrestntx/body-people/pull/1 mergeado en `main` (513a1ee).
+  5. **GitHub Pages:** ✅ apagado. El repo se transfirió a `parcerosmx` y quedó conectado a Vercel.
+- **Lighthouse en celular sobre el dominio publicado** (3 corridas):
+  - rendimiento 95–96, accesibilidad 100, buenas prácticas 100, SEO 100;
+  - LCP 2,7–2,8 s (1 s de espera de pintado que en local no aparece), TBT 50–70 ms, 252 KB;
+  - antes: 74, 78, 93 y 92, LCP 5,3 s, 3,99 MB.
+- **Meta Pixel:** no se pudo ver el envío real. Los navegadores automatizados no envían, y en el Chrome de Andrés
+  la librería no cargó (bloqueador). Queda el paso 3 de arriba.
 
 ## Entrega 1 — en qué quedó
 
@@ -176,7 +216,7 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 3 de 4** (SEO, schema y medic
 
 ## Hallazgos que la web nueva tiene que corregir, sí o sí
 
-- [x] `https://www.` da error de certificado, y el canonical, `og:url`, el schema y el sitemap apuntan ahí. **En la web nueva todo apunta al apex; falta el DNS de www (entrega 4).**
+- [x] `https://www.` da error de certificado, y el canonical, `og:url`, el schema y el sitemap apuntan ahí. **Resuelto: www con certificado y 308 al apex.**
 - [x] El mapa y el enlace llevan a la ficha VIEJA (CID `0x59a774c1888efa27`). Se cambian por la nueva:
   place_id `ChIJNcEnRtEvPo4RUXIANDDOJVQ`, CID `0x5425ce3034007251`.
 - [x] El JSON-LD es inválido porque tiene comentarios `//`. Se reemplaza por `ExerciseGym` completo.
@@ -185,7 +225,7 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 3 de 4** (SEO, schema y medic
 - [x] La imagen OG da 404 y la página tiene `lang="en"`.
 - [x] Precios y planes viejos. El Pixel manda `Lead` con valores 80.000, 250.000 y 420.000.
 - [x] Hay un contador de 2022 que tira un error cada segundo. jQuery y Montserrat bloquean el render.
-- [ ] HTTPS forzado está apagado. **Vercel lo trae activo; se resuelve al mover el DNS (entrega 4).**
+- [x] HTTPS forzado está apagado. **Resuelto: Vercel redirige http → https con HSTS.**
 
 ## Datos útiles de la competencia (15-sep-2026)
 
