@@ -47,6 +47,7 @@ const { reto, precios, entrenador, google } = negocio;
             <IconoWhatsApp size={22} />
             Quiero mi cupo en el reto
           </a>
+          <p class="oferta__microcopy">Escríbenos por WhatsApp y agendamos tu valoración inicial.</p>
           <ul class="lista-check">
             {reto.incluye.map((item) => <li>{item}</li>)}
           </ul>
@@ -82,13 +83,13 @@ const { reto, precios, entrenador, google } = negocio;
 
 <style>
   .hero { display: grid; background: var(--papel); }
-  .hero__foto { position: relative; aspect-ratio: 4 / 4.1; overflow: hidden; background: var(--suelo); }
+  .hero__foto { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: var(--suelo); }
   .hero__foto :global(.hero__img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
   .hero__foto::after { content: ""; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to top, rgb(22 24 28 / 0.35), transparent); pointer-events: none; }
   .hero__chips { position: absolute; left: var(--gutter); bottom: 16px; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; }
   .hero__chips .chip { text-decoration: none; }
 
-  .hero__texto { display: grid; gap: 16px; padding: 22px var(--gutter) 40px; }
+  .hero__texto { display: grid; gap: 14px; padding: 18px var(--gutter) 40px; }
   h1 { font-size: var(--t-h1); display: grid; gap: 10px; }
   .hero__bajada { color: var(--tinta-2); font-size: var(--t-s); }
 
@@ -102,7 +103,8 @@ const { reto, precios, entrenador, google } = negocio;
   .oferta__precio { display: flex; align-items: flex-end; gap: 10px; }
   .oferta__precio .precio { font-size: 3.25rem; }
   .oferta__nota { font-size: var(--t-xs); font-weight: 600; line-height: 1.25; padding-bottom: 2px; opacity: .95; }
-  .oferta__cuerpo { display: grid; gap: 16px; padding: 18px; }
+  .oferta__cuerpo { display: grid; gap: 14px; padding: 16px 18px 18px; }
+  .oferta__microcopy { margin-top: -6px; text-align: center; font-size: var(--t-xs); color: var(--tenue); }
   .oferta__cuerpo .lista-check { font-size: var(--t-s); }
   .oferta__garantia { font-size: var(--t-s); padding: 12px 14px; border-radius: var(--radio-s); background: var(--suelo); }
   .oferta__letra { font-size: var(--t-xs); color: var(--tenue); }

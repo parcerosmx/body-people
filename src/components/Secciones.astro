@@ -32,6 +32,13 @@ const filasHorario = semanaIgual
   ? [{ dia: "Lunes a viernes", franjas: horario.lunes }, { dia: "Sábado", franjas: horario.sabado }, { dia: "Domingo", franjas: horario.domingo }, { dia: "Festivos", franjas: horario.festivo }]
   : [...DIAS.map((d) => ({ dia: nombreDia[d], franjas: horario[d] })), { dia: "Festivos", franjas: horario.festivo }];
 
+const pasosReto = [
+  { titulo: "Pide tu cupo", texto: `Escríbenos por WhatsApp con el botón. El reto es para solo ${reto.personas_por_grupo} personas.` },
+  { titulo: "Valoración inicial", texto: "Conocemos tus objetivos, tu estilo de vida y tus medidas iniciales." },
+  { titulo: "Entrenas con plan y acompañamiento", texto: "Mínimo 3 veces por semana, con tu plan de entrenamiento y acompañamiento semipersonalizado." },
+  { titulo: "Resultados o el segundo mes gratis", texto: `${reto.garantia || "Te acompañamos hasta que veas el avance."} Desde el segundo mes, ${pesos(precios.mensualidad)}.` },
+];
+
 const metodo = [
   { titulo: "Valoración de ingreso", texto: "Conocemos tus objetivos, tu estilo de vida y tus medidas iniciales, para que el plan se adapte a ti." },
   { titulo: "Plan de entrenamiento", texto: "Diseñado según tus objetivos, con un periodo de adaptación para evitar lesiones y dolores innecesarios." },
@@ -70,6 +77,7 @@ const preguntas = [
       <p class="antetitulo">Programas</p>
       <h2 id="objetivos-titulo">¿Qué quieres lograr?</h2>
       <p>Toca tu objetivo y escríbeme por WhatsApp. El mensaje ya va escrito.</p>
+      <p class="objetivos__pista" aria-hidden="true">Desliza para ver los 4 →</p>
     </div>
     <ul class="objetivos">
       {negocio.programas.map((prog) => (
@@ -92,12 +100,17 @@ const preguntas = [
 <section class="seccion" id="metodo" aria-labelledby="metodo-titulo">
   <div class="contenedor partida">
     <div class="seccion__cabeza">
-      <p class="antetitulo">Tu primera vez</p>
-      <h2 id="metodo-titulo">Primero te conocemos. Después entrenas con plan.</h2>
+      <p class="antetitulo">{reto.activo ? `Así funciona el ${reto.nombre}` : "Tu primera vez"}</p>
+      <h2 id="metodo-titulo">{reto.activo ? "Tú pones las ganas. Yo, el plan y el acompañamiento." : "Primero te conocemos. Después entrenas con plan."}</h2>
       <p>No llegas a adivinar qué máquina usar: sales de la valoración sabiendo qué hacer.</p>
+      {reto.activo && (
+        <div class="metodo__accion">
+          <a target="_blank" rel="noopener" class="boton boton--principal" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="como-funciona"><IconoWhatsApp size={20} /> Quiero mi cupo en el reto</a>
+        </div>
+      )}
     </div>
     <ol class="ficha">
-      {metodo.map((paso) => (
+      {(reto.activo ? pasosReto : metodo).map((paso) => (
         <li><h3>{paso.titulo}</h3><p>{paso.texto}</p></li>
       ))}
     </ol>
@@ -149,7 +162,7 @@ const preguntas = [
           {reto.comparacion && <p class="plan__destaque">{reto.comparacion}</p>}
           <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.incluye_inscripcion && <li>Inscripción incluida</li>}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
           <p class="plan__nota">Solo {reto.personas_por_grupo} personas por reto. No incluye plan nutricional. Desde el segundo mes pagas la mensualidad normal de {pesos(precios.mensualidad)}.</p>
-          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero un cupo</a>
+          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero mi cupo en el reto</a>
         </article>
       )}
       <article class="plan">
@@ -250,7 +263,9 @@ const preguntas = [
 <style>
   .fila-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
 
-  .objetivos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .objetivos { list-style: none; margin: 0 calc(-1 * var(--gutter)); padding: 2px var(--gutter) 8px; display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); }
+  .objetivos li { scroll-snap-align: start; }
+  .objetivos__pista { font-size: var(--t-xs); color: var(--tenue); margin-top: 6px; }
   .objetivo { display: grid; gap: 6px; align-content: start; height: 100%; padding: 0 0 18px; overflow: hidden; border-radius: var(--radio); background: var(--papel); text-decoration: none; box-shadow: 0 0 0 1px var(--linea); transition: box-shadow .15s ease; }
   .objetivo:hover { box-shadow: 0 0 0 2px var(--tinta); }
   .objetivo > span:not(.objetivo__foto) { padding-inline: 18px; }
@@ -264,6 +279,7 @@ const preguntas = [
   .ficha li { counter-increment: paso; display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; row-gap: 4px; padding: 18px 0; border-bottom: 1px dashed var(--linea); }
   .ficha li::before { content: counter(paso, decimal-leading-zero); grid-row: span 2; font-family: var(--cifra); font-weight: 900; font-size: 1.9rem; line-height: 0.9; color: var(--tinta); }
   .ficha p { color: var(--tinta-2); font-size: var(--t-s); }
+  .metodo__accion { margin-top: 8px; }
 
   .mariano__acciones { margin-top: 8px; }
   .mariano { display: grid; gap: 20px; }
@@ -318,7 +334,8 @@ const preguntas = [
 
 
   @media (min-width: 760px) {
-    .objetivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .objetivos { margin: 0; padding: 0; grid-auto-flow: row; grid-auto-columns: auto; overflow: visible; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .objetivos__pista { display: none; }
     .planes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (min-width: 960px) {

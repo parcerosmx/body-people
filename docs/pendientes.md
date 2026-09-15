@@ -139,6 +139,35 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
 - ⚠️ **El guion del video** (`bodypeople-maps/video-reto-30-dias.md`) todavía dice $99.900, 12 sesiones y plan de
   alimentación: hay que alinearlo antes de pautar.
 
+## Auditoría contra la investigación (15-sep-2026)
+
+Se revisó la web contra el Artifact de la entrega 1: las 8 prácticas de conversión, los patrones de los referentes,
+las conclusiones de competencia y la estructura propuesta.
+
+**Cumple:** una sola acción principal con barra fija en celular y botón en el encabezado fijo en escritorio ·
+oferta sin riesgo con garantía · precio visible en la primera pantalla y comparación · FAQ en acordeón con
+objeciones de principiante · horario con estado «abierto ahora» y festivos · «Cómo llegar» sin iframe ·
+WhatsApp por intención con mensaje precargado · schema, canonical, robots y sitemap · Lighthouse ≥ 95.
+
+**Corregido en esta auditoría:**
+1. El botón del hero quedaba en el borde de la primera pantalla en celular (píxel 818 de 844) → foto del hero más
+   compacta: ahora el botón cae en 718-770.
+2. La acción principal tenía tres nombres distintos («Quiero mi cupo en el reto», «Acepto el reto», «Quiero un
+   cupo») → **un solo nombre repetido**, que es el patrón más fuerte de los referentes.
+3. Faltaban los pasos explícitos (Equinox «2 steps», Crunch «STEP 1-2-3») y el método mostraba plan nutricional,
+   que el reto no incluye → sección **«Así funciona el Reto 30 días»** en 4 pasos, con botón. El método general
+   vuelve solo si se apaga el reto.
+4. La página medía 10.296 px en celular, con 1.921 de tarjetas apiladas → **carrusel horizontal** con scroll-snap:
+   objetivos en 707 px y página en 9.093 px.
+5. Faltaba decir qué pasa al tocar el botón → microcopy «Escríbenos por WhatsApp y agendamos tu valoración inicial».
+
+**Lighthouse en celular tras los cambios (local, 3 corridas):** 99 · 100 · 100 · 100, LCP 2,1 s, CLS 0, 346 KB.
+
+**Lo que sigue faltando y no depende del diseño:**
+- **Prueba social real.** Es el hueco más grande: la sección solo enlaza a Google. Hacen falta las 2 reseñas con
+  permiso de Andrés, y seguir pidiendo reseñas (la investigación: el 47 % no usa un negocio con menos de 20).
+- Testimonios con nombre, edad o barrio, y fotos de socios reales de 30 a 50 años (no se inventan).
+
 ## ▶️ Lo que queda (en orden)
 
 1. ✅ **GitHub Pages apagado** (15-sep-2026). La rama de origen quedó en «None» y `andrestntx.github.io/body-people` da 404.
