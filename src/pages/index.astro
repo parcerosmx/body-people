@@ -1,0 +1,20 @@
+---
+import Base from "../layouts/Base.astro";
+import Encabezado from "../components/Encabezado.astro";
+import Hero from "../components/Hero.astro";
+import Secciones from "../components/Secciones.astro";
+import BarraFija from "../components/BarraFija.astro";
+import { negocio, pesos } from "../lib/negocio";
+
+// Entrega 3 revisa el copy final de title y description con Search Console.
+const titulo = "Gimnasio Body People | Gimnasio en el Amarilo, Villavicencio";
+const descripcion = `Gimnasio en el sector Amarilo de Villavicencio con plan de entrenamiento y nutricional hecho por ${negocio.entrenador.nombre}. Valoración de ingreso gratis. Mensualidad ${pesos(negocio.precios.mensualidad)}.`;
+---
+<Base titulo={titulo} descripcion={descripcion}>
+  <Encabezado />
+  <main>
+    <Hero />
+    <Secciones />
+  </main>
+  <BarraFija />
+</Base>

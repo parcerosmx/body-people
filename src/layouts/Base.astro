@@ -1,0 +1,35 @@
+---
+import "@fontsource-variable/instrument-sans/wdth.css";
+import "@fontsource/big-shoulders-display/900";
+import "../styles/global.css";
+import fuentePrincipal from "@fontsource-variable/instrument-sans/files/instrument-sans-latin-wdth-normal.woff2?url";
+import { negocio } from "../lib/negocio";
+
+interface Props { titulo: string; descripcion: string }
+const { titulo, descripcion } = Astro.props;
+const canonica = new URL(Astro.url.pathname.replace(/index$/, ""), Astro.site).href;
+---
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    <meta name="theme-color" content="#d10f2a" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={fuentePrincipal} as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content={negocio.nombre} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <!-- Entrega 3: og:image, JSON-LD ExerciseGym, Meta Pixel y eventos por intención. -->
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

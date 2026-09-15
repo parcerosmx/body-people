@@ -1,0 +1,51 @@
+---
+/**
+ * «Abierto ahora · cierra a las 10:00 p.m.» calculado en el navegador con la hora de Bogotá.
+ * Arranca oculto: sin JavaScript no se muestra un estado que podría estar mal (el horario completo está en #horario).
+ */
+import { negocio } from "../lib/negocio";
+const datos = JSON.stringify({ horario: negocio.horario, festivos: negocio.festivos });
+---
+<span class="chip" data-estado-abierto data-horario={datos} hidden><span class="punto" aria-hidden="true"></span><span data-estado-texto></span></span>
+
+<script>
+  type Franja = [string, string];
+  const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+
+  const partes = (fecha: Date) => {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hourCycle: "h23", weekday: "short",
+    }).formatToParts(fecha).map((x) => [x.type, x.value]));
+    const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(p.weekday);
+    return { iso: `${p.year}-${p.month}-${p.day}`, min: Number(p.hour) * 60 + Number(p.minute), wd };
+  };
+  const aMin = (h: string) => { const [a, b] = h.split(":").map(Number); return a * 60 + b; };
+  const h12 = (h: string) => { const [a, b] = h.split(":").map(Number); return `${a % 12 || 12}:${String(b).padStart(2, "0")} ${a < 12 ? "a.m." : "p.m."}`; };
+
+  function estado(horario: Record<string, Franja[]>, festivos: string[], ahora = new Date()) {
+    const franjasDe = (d: Date) => { const p = partes(d); return festivos.includes(p.iso) ? horario.festivo : horario[DIAS[p.wd]]; };
+    const hoy = partes(ahora);
+    for (const [a, c] of franjasDe(ahora)) {
+      if (hoy.min >= aMin(a) && hoy.min < aMin(c)) return { abierto: true, texto: `Abierto · cierra ${h12(c)}` };
+    }
+    for (let i = 0; i < 8; i++) {
+      const dia = new Date(ahora.getTime() + i * 86400000);
+      const siguiente = franjasDe(dia).find(([a]) => i > 0 || aMin(a) > hoy.min);
+      if (siguiente) {
+        const cuando = i === 0 ? "hoy" : i === 1 ? "mañana" : `el ${DIAS[partes(dia).wd].replace("miercoles", "miércoles").replace("sabado", "sábado")}`;
+        return { abierto: false, texto: `Cerrado · abre ${cuando} ${h12(siguiente[0])}` };
+      }
+    }
+    return null;
+  }
+
+  for (const el of document.querySelectorAll<HTMLElement>("[data-estado-abierto]")) {
+    const { horario, festivos } = JSON.parse(el.dataset.horario!);
+    const e = estado(horario, festivos);
+    if (!e) continue;
+    el.dataset.abierto = String(e.abierto);
+    el.querySelector("[data-estado-texto]")!.textContent = e.texto;
+    el.hidden = false;
+  }
+</script>

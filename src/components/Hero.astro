@@ -1,0 +1,111 @@
+---
+import { Picture } from "astro:assets";
+import fotoMariano from "../assets/fotos/mariano-pinzon.jpg";
+import IconoWhatsApp from "./IconoWhatsApp.astro";
+import EstadoAbierto from "./EstadoAbierto.astro";
+import { negocio, pesos, whatsapp, mapaFicha, MENSAJES } from "../lib/negocio";
+
+const { reto, precios, entrenador, google } = negocio;
+---
+<section class="hero" aria-labelledby="hero-titulo">
+  <div class="hero__foto">
+    <Picture
+      src={fotoMariano}
+      formats={["avif", "webp"]}
+      widths={[400, 640, 960]}
+      sizes="(min-width: 960px) 46vw, 100vw"
+      alt={`${entrenador.nombre}, entrenador y dueño de ${negocio.nombre}`}
+      loading="eager"
+      fetchpriority="high"
+      class="hero__img"
+    />
+    <div class="hero__chips">
+      <a class="chip" href={mapaFicha()} rel="noopener">
+        <span class="estrellas" aria-hidden="true">★</span> {google.calificacion} en Google
+      </a>
+      <EstadoAbierto />
+    </div>
+  </div>
+
+  <div class="hero__texto">
+    <h1 id="hero-titulo">
+      <span class="antetitulo">{negocio.nombre} · Amarilo, Villavicencio</span>
+      Soy Mariano. Te armo tu plan y te acompaño cada mes.
+    </h1>
+    <p class="hero__bajada">{entrenador.titulo}. {entrenador.trayectoria}.</p>
+
+    {reto.activo ? (
+      <div class="oferta" id="oferta">
+        <div class="oferta__cabeza">
+          <p class="oferta__nombre">{reto.nombre}</p>
+          <p class="oferta__precio"><span class="precio">{pesos(reto.precio)}</span><span class="oferta__nota">el mes{reto.sin_permanencia && <><br />sin permanencia</>}</span></p>
+        </div>
+        <div class="oferta__cuerpo">
+          <a class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="hero" data-cta-hero>
+            <IconoWhatsApp size={22} />
+            Quiero un cupo del reto
+          </a>
+          <ul class="lista-check">
+            {reto.incluye.map((item) => <li>{item}</li>)}
+          </ul>
+          {reto.garantia && <p class="oferta__garantia"><strong>Garantía:</strong> {reto.garantia}</p>}
+          <p class="oferta__letra">Grupos de {reto.personas_por_grupo} personas que arrancan juntos. Si sigues después del reto, tu mensualidad queda congelada en {pesos(reto.continuidad)}.</p>
+        </div>
+      </div>
+    ) : (
+      <div class="oferta" id="oferta">
+        <div class="oferta__cabeza">
+          <p class="oferta__nombre">Valoración de ingreso</p>
+          <p class="oferta__precio"><span class="precio">Gratis</span><span class="oferta__nota">mensualidad<br />{pesos(precios.mensualidad)}</span></p>
+        </div>
+        <div class="oferta__cuerpo">
+          <a class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.valoracion)} data-intencion="valoracion" data-ubicacion="hero" data-cta-hero>
+            <IconoWhatsApp size={22} />
+            Agendar mi valoración gratis
+          </a>
+          <ul class="lista-check">
+            <li>Revisamos tus objetivos, tu estilo de vida y tus medidas</li>
+            <li>Sales con tu plan de entrenamiento y nutricional</li>
+            <li>Cada mes controlamos tu progreso</li>
+          </ul>
+        </div>
+      </div>
+    )}
+
+    {reto.activo && precios.valoracion_gratis && (
+      <p class="hero__alterna">¿Solo quieres conocer? <a class="enlace-flecha" href={whatsapp(MENSAJES.valoracion)} data-intencion="valoracion" data-ubicacion="hero-alterna">La valoración de ingreso es gratis</a></p>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero { display: grid; background: var(--papel); }
+  .hero__foto { position: relative; aspect-ratio: 4 / 4.1; overflow: hidden; background: var(--suelo); }
+  .hero__foto :global(.hero__img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+  .hero__foto::after { content: ""; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to top, rgb(22 24 28 / 0.35), transparent); pointer-events: none; }
+  .hero__chips { position: absolute; left: var(--gutter); bottom: 16px; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero__chips .chip { text-decoration: none; }
+
+  .hero__texto { display: grid; gap: 16px; padding: 22px var(--gutter) 40px; }
+  h1 { font-size: var(--t-h1); display: grid; gap: 10px; }
+  .hero__bajada { color: var(--tinta-2); font-size: var(--t-s); }
+
+  .oferta { border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea), var(--sombra); overflow: hidden; margin-top: 4px; }
+  .oferta__cabeza { background: var(--marca); color: #fff; padding: 16px 18px 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .oferta__nombre { font-weight: 700; font-stretch: 85%; font-size: var(--t-l); line-height: 1.1; max-width: 5.2em; }
+  .oferta__precio { display: flex; align-items: flex-end; gap: 10px; }
+  .oferta__precio .precio { font-size: 3.25rem; }
+  .oferta__nota { font-size: var(--t-xs); font-weight: 600; line-height: 1.25; padding-bottom: 2px; opacity: .95; }
+  .oferta__cuerpo { display: grid; gap: 16px; padding: 18px; }
+  .oferta__cuerpo .lista-check { font-size: var(--t-s); }
+  .oferta__garantia { font-size: var(--t-s); padding: 12px 14px; border-radius: var(--radio-s); background: var(--suelo); }
+  .oferta__letra { font-size: var(--t-xs); color: var(--tenue); }
+  .hero__alterna { font-size: var(--t-s); color: var(--tinta-2); }
+
+  @media (min-width: 960px) {
+    .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); align-items: stretch; max-width: 1280px; margin-inline: auto; }
+    .hero__foto { order: 2; aspect-ratio: auto; min-height: 640px; border-radius: 0 0 0 var(--radio); }
+    .hero__texto { order: 1; align-content: center; padding: 48px 56px 56px max(var(--gutter), calc((100vw - 1280px) / 2 + var(--gutter))); gap: 18px; }
+    .oferta { max-width: 520px; }
+  }
+</style>

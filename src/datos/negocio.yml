@@ -1,0 +1,126 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Datos del Gimnasio Body People
+#
+#  Todo lo que cambia (precios, horario, reto, festivos) se edita SOLO aquí.
+#  Al guardar este archivo en GitHub, la web se vuelve a publicar sola.
+#
+#  Reglas:
+#   - Nombre, dirección, teléfono y horario deben ser IGUALES a la ficha de Google.
+#   - Los precios van sin puntos ni signo: 105000, no "$105.000".
+#   - Si algo está mal escrito, la publicación falla y la web anterior sigue en línea.
+# ─────────────────────────────────────────────────────────────────────────────
+
+nombre: Gimnasio Body People
+
+entrenador:
+  nombre: Mariano Pinzón
+  titulo: Entrenador deportivo de la Escuela Nacional del Deporte
+  # Más de 10 años de trayectoria, pero en otra ubicación: el local actual es más reciente.
+  trayectoria: Más de 10 años entrenando personas
+
+contacto:
+  telefono: "+57 317 442 6332"
+  whatsapp: "573174426332" # sin "+", sin espacios
+  instagram: https://www.instagram.com/gym.bodypeople/
+  facebook: https://www.facebook.com/profile.php?id=61576992184223 # página temporal
+
+direccion:
+  calle: Carrera del Amor con Calle 10 Sur
+  sector: sector Amarilo
+  ciudad: Villavicencio
+  departamento: Meta
+  pais: CO
+  referencia: Cerca de la glorieta de Multifamiliares
+  lat: 4.105504
+  lng: -73.631938
+
+google:
+  place_id: ChIJNcEnRtEvPo4RUXIANDDOJVQ
+  cid: "6063479179750437457" # 0x5425ce3034007251 en decimal
+  enlace_resenas: https://g.page/r/CVFyADQwziVUEBM/review
+  calificacion: "5,0"
+
+# Horario por día. Cada franja es [abre, cierra] en formato 24 h.
+horario:
+  lunes: [["05:00", "14:00"], ["16:00", "22:00"]]
+  martes: [["05:00", "14:00"], ["16:00", "22:00"]]
+  miercoles: [["05:00", "14:00"], ["16:00", "22:00"]]
+  jueves: [["05:00", "14:00"], ["16:00", "22:00"]]
+  viernes: [["05:00", "14:00"], ["16:00", "22:00"]]
+  sabado: [["07:00", "13:00"]]
+  domingo: [["09:00", "13:00"]]
+  festivo: [["09:00", "13:00"]]
+
+# Festivos de Colombia en que se abre con horario de festivo. Formato "AAAA-MM-DD", entre comillas.
+# Mismos que están cargados en la ficha de Google (hasta el 11-ene-2027).
+festivos:
+  - "2026-10-12"
+  - "2026-11-02"
+  - "2026-11-16"
+  - "2026-12-08"
+  - "2026-12-25"
+  - "2027-01-01"
+  - "2027-01-11"
+
+precios:
+  mensualidad: 105000
+  primer_mes: 120000 # incluye la inscripción
+  valoracion_gratis: true
+
+# Reto 30 días. Para apagarlo, cambiar "activo: true" por "activo: false":
+# la web vuelve a abrir con la valoración de ingreso gratis.
+# No lleva fecha de fin a propósito (decisión de Andrés, 15-sep-2026).
+reto:
+  activo: true
+  nombre: Reto 30 días
+  precio: 69900
+  continuidad: 99900 # mensualidad congelada para quien sigue después del reto
+  sin_permanencia: true
+  personas_por_grupo: 25
+  incluye:
+    - Valoración de ingreso con medidas
+    - Plan de entrenamiento y de alimentación hecho por Mariano
+    - Revisión a mitad de mes
+    - Medición final
+  # ⚠️ Antes de publicar, definir qué medidas cuentan (cintura, cadera, peso, % grasa).
+  # Si se deja vacío (garantia: ""), la web no la muestra.
+  garantia: Si entrenas mínimo 12 veces en el mes y tus medidas no cambian, el segundo mes es gratis.
+
+programas:
+  - id: bajar-de-peso
+    nombre: Bajar de peso y quemar grasa
+    corto: Bajar de peso
+    detalle: Alimentación, circuitos y rutinas de fuerza para quemar grasa de forma progresiva.
+  - id: piernas-gluteos
+    nombre: Tonificar piernas y glúteos
+    corto: Piernas y glúteos
+    detalle: Ganancia muscular enfocada en piernas y glúteos, dentro de tu plan de entrenamiento.
+  - id: masa-muscular
+    nombre: Ganar masa muscular
+    corto: Ganar músculo
+    detalle: Plan de fuerza progresivo y alimentación que prioriza cuidar y aumentar tu masa muscular.
+  - id: desde-cero
+    nombre: Empezar desde cero
+    corto: Empezar desde cero
+    detalle: Periodo de adaptación para aprender las máquinas y entrenar sin lesionarte.
+
+# Lo que hay en el gimnasio.
+servicios:
+  - Zona de máquinas
+  - Pesas y mancuernas
+  - Cardio
+  - Funcional y TRX
+  - Clases grupales
+  - Venta de suplementos y proteínas
+
+# Lo que NO hay (se dice en las preguntas frecuentes para evitar malentendidos).
+no_ofrece:
+  - Spinning
+  - Clases de rumba
+
+comodidades:
+  - Parqueadero gratis
+  - Wi-Fi gratis
+  - Baños
+  - Entrada accesible
+  - Pago con tarjeta débito y crédito

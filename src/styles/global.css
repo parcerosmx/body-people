@@ -1,0 +1,113 @@
+/*
+  Sistema visual — Gimnasio Body People
+  Dirección «El entrenador del barrio» (entrega 1, 15-sep-2026):
+  fondo claro, gente real, primera persona, UN solo acento (el rojo de la marca) reservado para la acción.
+  El amarillo de la cinta del piso solo marca la ficha de la valoración.
+*/
+
+:root {
+  /* Color */
+  --papel: #ffffff;
+  --suelo: #f3f3f1;
+  --tinta: #16181c;
+  --tinta-2: #474c55;
+  --tenue: #6a6f78;
+  --linea: #e3e4e7;
+  --rojo: #d10f2a;          /* botones: contraste AA con blanco */
+  --rojo-hover: #a80c22;
+  --rojo-hondo: #740d03;    /* extremo oscuro del degradado del logo */
+  --rojo-vivo: #f20d28;     /* extremo claro del degradado del logo */
+  --marca: linear-gradient(135deg, var(--rojo-hondo) 0%, var(--rojo-vivo) 100%);
+  --cinta: #f2c230;
+  --abierto: #16804a;
+  --estrella: #e0a100;
+
+  /* Tipografía */
+  --sans: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --cifra: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --t-xs: 0.8125rem;   /* 13 */
+  --t-s: 0.9375rem;    /* 15 */
+  --t-m: 1.0625rem;    /* 17 */
+  --t-l: 1.3125rem;    /* 21 */
+  --t-xl: 1.75rem;     /* 28 */
+  --t-2xl: 2.25rem;    /* 36 */
+  --t-h1: clamp(1.875rem, 1.2rem + 3.2vw, 3.25rem);
+
+  /* Espacio y forma */
+  --gutter: 20px;
+  --ancho: 1120px;
+  --radio: 14px;
+  --radio-s: 8px;
+  --sombra: 0 1px 2px rgb(22 24 28 / 0.06), 0 8px 24px -12px rgb(22 24 28 / 0.18);
+  --barra-alto: 72px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--sans);
+  font-size: var(--t-m);
+  line-height: 1.5;
+  font-stretch: 100%;
+  padding-bottom: var(--barra-alto); /* espacio para la barra fija */
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; border-radius: 4px; }
+
+h1, h2, h3 { font-stretch: 82%; font-weight: 700; line-height: 1.05; letter-spacing: -0.012em; margin: 0; text-wrap: balance; }
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-l); line-height: 1.15; }
+p { margin: 0; text-wrap: pretty; }
+
+.contenedor { width: 100%; max-width: var(--ancho); margin-inline: auto; padding-inline: var(--gutter); }
+.seccion { padding-block: 56px; }
+.seccion--suelo { background: var(--suelo); }
+.seccion__cabeza { display: grid; gap: 10px; margin-bottom: 28px; max-width: 40rem; }
+.seccion__cabeza p { color: var(--tinta-2); }
+.antetitulo { font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tenue); font-stretch: 100%; }
+
+.visualmente-oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 12px 22px; border-radius: 999px; border: 0;
+  font: inherit; font-weight: 650; font-size: var(--t-m); font-stretch: 92%; text-decoration: none; text-align: center; line-height: 1.2;
+  cursor: pointer; transition: background-color .15s ease, transform .15s ease;
+}
+.boton:active { transform: translateY(1px); }
+.boton--principal { background: var(--rojo); color: #fff; }
+.boton--principal:hover { background: var(--rojo-hover); }
+.boton--secundario { background: var(--papel); color: var(--tinta); box-shadow: inset 0 0 0 1.5px var(--linea); }
+.boton--secundario:hover { box-shadow: inset 0 0 0 1.5px var(--tinta-2); }
+.boton--ancho { width: 100%; }
+.enlace-flecha { font-weight: 600; color: var(--tinta); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+
+/* ---------- Piezas ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px;
+  background: var(--papel); color: var(--tinta); font-size: var(--t-xs); font-weight: 600; box-shadow: var(--sombra); white-space: nowrap;
+}
+.chip .punto { width: 8px; height: 8px; border-radius: 50%; background: var(--abierto); }
+.chip[data-abierto="false"] .punto { background: var(--tenue); }
+.estrellas { color: var(--estrella); letter-spacing: 1px; }
+
+.precio { font-family: var(--cifra); font-weight: 900; line-height: 0.85; letter-spacing: 0.005em; font-variant-numeric: tabular-nums; }
+
+.lista-check { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lista-check li { position: relative; padding-left: 28px; }
+.lista-check li::before {
+  content: ""; position: absolute; left: 0; top: 0.2em; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--tinta) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
+}
+
+@media (min-width: 760px) {
+  :root { --gutter: 32px; }
+  .seccion { padding-block: 88px; }
+}

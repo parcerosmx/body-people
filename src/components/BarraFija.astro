@@ -1,0 +1,37 @@
+---
+/**
+ * Botón de WhatsApp fijo abajo, al alcance del pulgar.
+ * Se esconde mientras el botón del hero está en pantalla, para no repetirlo; sin JavaScript queda siempre visible.
+ */
+import IconoWhatsApp from "./IconoWhatsApp.astro";
+import { negocio, whatsapp, MENSAJES } from "../lib/negocio";
+
+const reto = negocio.reto.activo;
+---
+<div class="barra" data-barra>
+  <a class="boton boton--principal boton--ancho" href={whatsapp(reto ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto ? "reto" : "valoracion"} data-ubicacion="barra-fija">
+    <IconoWhatsApp size={22} />
+    {reto ? `Quiero un cupo del ${negocio.reto.nombre}` : "Agendar mi valoración gratis"}
+  </a>
+</div>
+
+<style>
+  .barra {
+    position: fixed; inset: auto 0 0; z-index: 20; padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+    background: rgb(255 255 255 / 0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 -1px 0 var(--linea); transition: transform .25s ease;
+  }
+  .barra[data-oculta="true"] { transform: translateY(110%); }
+  @media (min-width: 960px) {
+    .barra { left: auto; right: 24px; bottom: 24px; padding: 0; background: none; backdrop-filter: none; box-shadow: none; }
+    .barra .boton { width: auto; box-shadow: var(--sombra); }
+  }
+</style>
+
+<script>
+  const barra = document.querySelector<HTMLElement>("[data-barra]");
+  const ctaHero = document.querySelector("[data-cta-hero]");
+  if (barra && ctaHero && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => { barra.dataset.oculta = String(e.isIntersecting); }).observe(ctaHero);
+  }
+</script>
