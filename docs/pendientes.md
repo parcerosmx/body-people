@@ -126,8 +126,9 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
   sin cuerpos de modelo ni «resultados»):
   - bajar de peso, piernas y glúteos, y masa muscular: **generadas con GPT Image 2.5 en Higgsfield** (CLI
     `higgsfield`, cuenta contacto@parceros.mx), usando fotos reales del gimnasio como escenario;
-  - llevan el rótulo **«Imagen ilustrativa generada con IA»** (`imagen_ia: true` en `negocio.yml`) y nunca se
-    presentan como socios ni resultados;
+  - **sin rótulo de IA** (decisión de Andrés, 15-sep-2026). `imagen_ia: true` en `negocio.yml` solo registra el
+    origen. Nunca se presentan como socios, testimonios ni resultados;
+  - si se reusan en anuncios, Meta puede etiquetarlas como IA por su cuenta;
   - «Empezar desde cero»: foto **real** de Mariano acompañando;
   - originales, 9 variantes y prompts: `~/src/claude-ia/bodypeople-maps/fotos/ia-objetivos/`.
   - Ideal a futuro: reemplazarlas por una sesión corta con socios reales de 30 a 50 años, con su permiso.

@@ -91,7 +91,8 @@ reto:
   # Si se deja vacío (garantia: ""), la web no la muestra.
   garantia: Si entrenas mínimo 3 veces por semana y no se cumplen tus objetivos, el segundo mes es gratis.
 
-# imagen_ia: true muestra el rótulo «Imagen ilustrativa generada con IA». Nunca presentarlas como socios ni resultados.
+# imagen_ia: true indica que la imagen fue generada con IA (sin rótulo visible, decisión de Andrés del 15-sep-2026).
+# Nunca presentarlas como socios, testimonios ni resultados.
 programas:
   - id: bajar-de-peso
     imagen: ia-bajar-de-peso.webp # en src/assets/fotos/
