@@ -91,8 +91,8 @@ const { reto, precios, entrenador, google } = negocio;
   .hero__bajada { color: var(--tinta-2); font-size: var(--t-s); }
 
   .oferta { border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea), var(--sombra); overflow: hidden; margin-top: 4px; }
-  .oferta__cabeza { background: var(--marca); color: #fff; padding: 16px 18px 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
-  .oferta__nombre { font-weight: 700; font-stretch: 85%; font-size: var(--t-l); line-height: 1.1; max-width: 5.2em; }
+  .oferta__cabeza { background: var(--marca); color: #fff; padding: 14px 18px 16px; display: grid; gap: 6px; }
+  .oferta__nombre { font-weight: 700; font-size: var(--t-xs); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.1; }
   .oferta__precio { display: flex; align-items: flex-end; gap: 10px; }
   .oferta__precio .precio { font-size: 3.25rem; }
   .oferta__nota { font-size: var(--t-xs); font-weight: 600; line-height: 1.25; padding-bottom: 2px; opacity: .95; }
@@ -103,9 +103,16 @@ const { reto, precios, entrenador, google } = negocio;
   .hero__alterna { font-size: var(--t-s); color: var(--tinta-2); }
 
   @media (min-width: 960px) {
-    .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); align-items: stretch; max-width: 1280px; margin-inline: auto; }
-    .hero__foto { order: 2; aspect-ratio: auto; min-height: 640px; border-radius: 0 0 0 var(--radio); }
-    .hero__texto { order: 1; align-content: center; padding: 48px 56px 56px max(var(--gutter), calc((100vw - 1280px) / 2 + var(--gutter))); gap: 18px; }
-    .oferta { max-width: 520px; }
+    .hero {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 64px; align-items: center;
+      max-width: var(--ancho); margin-inline: auto; padding: 64px var(--gutter) 88px;
+    }
+    .hero__foto { order: 2; aspect-ratio: 4 / 5; border-radius: 24px; box-shadow: var(--sombra); }
+    .hero__foto :global(.hero__img) { object-position: 50% 30%; }
+    .hero__chips { left: 20px; bottom: 20px; }
+    .hero__texto { order: 1; padding: 0; gap: 18px; }
+    .oferta { max-width: 540px; }
+    .oferta__cabeza { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 16px 18px 14px; }
+    .oferta__nombre { font-size: var(--t-l); font-stretch: 85%; letter-spacing: -0.01em; text-transform: none; max-width: 6em; }
   }
 </style>

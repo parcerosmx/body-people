@@ -78,7 +78,7 @@ const preguntas = [
 
 <!-- Tu primera vez: el método como la ficha de la valoración -->
 <section class="seccion" id="metodo" aria-labelledby="metodo-titulo">
-  <div class="contenedor metodo">
+  <div class="contenedor partida">
     <div class="seccion__cabeza">
       <p class="antetitulo">Tu primera vez</p>
       <h2 id="metodo-titulo">Primero te conocemos. Después entrenas con plan.</h2>
@@ -92,42 +92,42 @@ const preguntas = [
   </div>
 </section>
 
-<!-- Mariano -->
+<!-- Mariano y lo que dicen en Google -->
 <section class="seccion seccion--suelo" id="mariano" aria-labelledby="mariano-titulo">
-  <div class="contenedor mariano">
+  <div class="contenedor partida">
     <div class="seccion__cabeza">
       <p class="antetitulo">Tu entrenador</p>
       <h2 id="mariano-titulo">{entrenador.nombre}</h2>
       <p>{entrenador.titulo}. {entrenador.trayectoria}. Es el dueño del gimnasio y atiende a sus socios en el día a día.</p>
+      <div class="fila-botones mariano__acciones">
+        <a class="boton boton--secundario" href={whatsapp(MENSAJES.mariano)} data-intencion="mariano" data-ubicacion="mariano"><IconoWhatsApp size={20} /> Escríbele a Mariano</a>
+      </div>
     </div>
-    <blockquote class="mariano__cita">
-      <p>«Como instructor y propietario de Body People busco que cumplas tus metas disfrutando de todo el proceso.»</p>
-    </blockquote>
-    <a class="boton boton--secundario" href={whatsapp(MENSAJES.mariano)} data-intencion="mariano" data-ubicacion="mariano"><IconoWhatsApp size={20} /> Escríbele a Mariano</a>
-  </div>
-</section>
-
-<!-- Reseñas — PENDIENTE (Andrés): permiso para mostrar las reseñas de Google con nombre. Se copian tal cual, sin aggregateRating en el schema. -->
-<section class="seccion" id="resenas" aria-labelledby="resenas-titulo">
-  <div class="contenedor resenas">
-    <div class="seccion__cabeza">
-      <p class="antetitulo">Reseñas</p>
-      <h2 id="resenas-titulo"><span class="estrellas" aria-hidden="true">★★★★★</span> {google.calificacion} en Google</h2>
-      <p>Lee lo que dicen los socios en la ficha de Google del gimnasio.</p>
-    </div>
-    <div class="fila-botones">
-      <a class="boton boton--secundario" href={mapaFicha()} rel="noopener">Ver reseñas en Google</a>
-      <a class="enlace-flecha" href={google.enlace_resenas} rel="noopener">¿Ya entrenas aquí? Deja tu reseña</a>
+    <div class="mariano">
+      <blockquote class="mariano__cita">
+        <p>«Como instructor y propietario de Body People busco que cumplas tus metas disfrutando de todo el proceso.»</p>
+        <footer>— {entrenador.nombre}</footer>
+      </blockquote>
+      <!-- PENDIENTE (Andrés): permiso para mostrar las reseñas de Google con nombre y fecha. Se copian tal cual, sin aggregateRating en el schema. -->
+      <div class="resenas" id="resenas">
+        <p class="resenas__nota"><span class="estrellas" aria-hidden="true">★★★★★</span> <strong>{google.calificacion}</strong> en Google</p>
+        <p class="resenas__texto">Lee lo que dicen los socios en la ficha de Google del gimnasio.</p>
+        <div class="fila-botones">
+          <a class="boton boton--secundario" href={mapaFicha()} rel="noopener">Ver reseñas en Google</a>
+          <a class="enlace-flecha" href={google.enlace_resenas} rel="noopener">¿Ya entrenas aquí? Deja tu reseña</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Precios -->
-<section class="seccion seccion--suelo" id="precios" aria-labelledby="precios-titulo">
-  <div class="contenedor">
+<section class="seccion" id="precios" aria-labelledby="precios-titulo">
+  <div class="contenedor partida">
     <div class="seccion__cabeza">
       <p class="antetitulo">Precios</p>
       <h2 id="precios-titulo">Lo que cuesta, sin letra chica</h2>
+      <p>La valoración de ingreso es gratis. Recibimos tarjeta débito y crédito.</p>
     </div>
     <div class="planes">
       {reto.activo && (
@@ -157,7 +157,7 @@ const preguntas = [
 </section>
 
 <!-- Galería -->
-<section class="seccion" id="gimnasio" aria-labelledby="gimnasio-titulo">
+<section class="seccion seccion--suelo" id="gimnasio" aria-labelledby="gimnasio-titulo">
   <div class="contenedor">
     <div class="seccion__cabeza">
       <p class="antetitulo">El gimnasio</p>
@@ -173,7 +173,7 @@ const preguntas = [
 </section>
 
 <!-- Horario y ubicación -->
-<section class="seccion seccion--suelo" id="horario" aria-labelledby="horario-titulo">
+<section class="seccion" id="horario" aria-labelledby="horario-titulo">
   <div class="contenedor ubicacion">
     <div>
       <div class="seccion__cabeza">
@@ -206,8 +206,8 @@ const preguntas = [
 </section>
 
 <!-- Preguntas frecuentes -->
-<section class="seccion" id="preguntas" aria-labelledby="preguntas-titulo">
-  <div class="contenedor preguntas">
+<section class="seccion seccion--suelo" id="preguntas" aria-labelledby="preguntas-titulo">
+  <div class="contenedor partida">
     <div class="seccion__cabeza">
       <p class="antetitulo">Preguntas frecuentes</p>
       <h2 id="preguntas-titulo">Lo que más nos preguntan</h2>
@@ -262,10 +262,15 @@ const preguntas = [
   .ficha li::before { content: counter(paso, decimal-leading-zero); grid-row: span 2; font-family: var(--cifra); font-weight: 900; font-size: 1.9rem; line-height: 0.9; color: var(--tinta); }
   .ficha p { color: var(--tinta-2); font-size: var(--t-s); }
 
-  .mariano { display: grid; gap: 20px; justify-items: start; }
-  .mariano__cita { margin: 0; padding-left: 18px; border-left: 3px solid var(--rojo); font-size: var(--t-l); font-stretch: 90%; line-height: 1.35; max-width: 36rem; }
-
-  .resenas .estrellas { font-size: 0.8em; }
+  .mariano__acciones { margin-top: 8px; }
+  .mariano { display: grid; gap: 20px; }
+  .mariano__cita { margin: 0; padding: 26px 24px; border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
+  .mariano__cita p { font-size: clamp(var(--t-l), 1rem + 1.2vw, var(--t-xl)); font-stretch: 85%; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+  .mariano__cita footer { margin-top: 14px; font-size: var(--t-s); color: var(--tenue); }
+  .resenas { display: grid; gap: 10px; padding: 22px 24px; border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
+  .resenas__nota { font-size: var(--t-l); }
+  .resenas__nota strong { font-family: var(--cifra); font-weight: 900; font-size: 2rem; vertical-align: -3px; margin-inline: 4px 2px; }
+  .resenas__texto { color: var(--tinta-2); font-size: var(--t-s); margin-bottom: 6px; }
 
   .planes { display: grid; gap: 16px; }
   .plan { display: grid; gap: 14px; align-content: start; padding: 22px; border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea); }
@@ -275,12 +280,13 @@ const preguntas = [
   .plan__periodo { color: var(--tenue); font-size: var(--t-s); }
   .plan .lista-check { font-size: var(--t-s); }
   .plan__nota { font-size: var(--t-xs); color: var(--tenue); }
+  .plan .boton { font-size: var(--t-s); padding-inline: 14px; }
 
   .galeria { list-style: none; margin: 0; padding: 0 var(--gutter) 6px; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); }
   .galeria li { flex: 0 0 82vw; max-width: 420px; scroll-snap-align: start; }
   .galeria :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radio); }
 
-  .ubicacion { display: grid; gap: 28px; }
+  .ubicacion { display: grid; gap: 28px; align-items: start; }
   .horario { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; margin-bottom: 20px; }
   .horario th, .horario td { text-align: left; padding: 10px 0; border-bottom: 1px solid var(--linea); vertical-align: top; font-size: var(--t-s); }
   .horario th { font-weight: 650; padding-right: 16px; white-space: nowrap; }
@@ -292,7 +298,7 @@ const preguntas = [
   .fachada :global(img) { width: 100%; border-radius: var(--radio); aspect-ratio: 3 / 2; object-fit: cover; }
   .fachada figcaption { font-size: var(--t-xs); color: var(--tenue); margin-top: 8px; }
 
-  .acordeon { border-top: 1px solid var(--linea); max-width: 46rem; }
+  .acordeon { border-top: 1px solid var(--linea); }
   .acordeon details { border-bottom: 1px solid var(--linea); }
   .acordeon summary { cursor: pointer; list-style: none; padding: 18px 36px 18px 0; font-weight: 650; position: relative; }
   .acordeon summary::-webkit-details-marker { display: none; }
@@ -311,13 +317,21 @@ const preguntas = [
 
   @media (min-width: 760px) {
     .objetivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .planes { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 900px; }
-    .galeria { padding-inline: max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); }
+    .planes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .pie__fila { grid-template-columns: 1fr auto; align-items: end; }
   }
   @media (min-width: 960px) {
-    .metodo { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
     .objetivos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .ubicacion { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+    /* Galería: cuadrícula dentro del contenedor, sin carrusel. */
+    .galeria {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; overflow: visible;
+      max-width: var(--ancho); margin-inline: auto; padding: 0 var(--gutter);
+    }
+    .galeria li { max-width: none; }
+    .ubicacion { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; }
+    .fachada :global(img) { aspect-ratio: 4 / 3; }
+    .cierre__caja { grid-template-columns: 1fr auto; align-items: center; column-gap: 40px; }
+    .cierre__caja .boton { grid-column: 2; grid-row: 1 / span 2; }
+    .cierre h2 { font-size: 2.75rem; }
   }
 </style>

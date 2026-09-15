@@ -107,7 +107,17 @@ p { margin: 0; text-wrap: pretty; }
   background: var(--tinta) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
 }
 
+/* Partida: en escritorio, el título a la izquierda (fijo al hacer scroll) y el contenido a la derecha. */
+.partida { display: grid; gap: 4px; }
+
 @media (min-width: 760px) {
   :root { --gutter: 32px; }
   .seccion { padding-block: 88px; }
+}
+@media (min-width: 960px) {
+  :root { --ancho: 1200px; --encabezado-alto: 72px; }
+  body { padding-bottom: 0; } /* en escritorio el botón vive en el encabezado fijo */
+  h2 { font-size: 2.75rem; }
+  .partida { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; align-items: start; }
+  .partida > .seccion__cabeza { position: sticky; top: calc(var(--encabezado-alto) + 32px); margin-bottom: 0; }
 }

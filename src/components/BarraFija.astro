@@ -22,10 +22,8 @@ const reto = negocio.reto.activo;
     box-shadow: 0 -1px 0 var(--linea); transition: transform .25s ease;
   }
   .barra[data-oculta="true"] { transform: translateY(110%); }
-  @media (min-width: 960px) {
-    .barra { left: auto; right: 24px; bottom: 24px; padding: 0; background: none; backdrop-filter: none; box-shadow: none; }
-    .barra .boton { width: auto; box-shadow: var(--sombra); }
-  }
+  /* En escritorio el botón vive en el encabezado fijo. */
+  @media (min-width: 960px) { .barra { display: none; } }
 </style>
 
 <script>
