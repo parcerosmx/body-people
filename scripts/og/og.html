@@ -1,0 +1,38 @@
+<!--
+  Plantilla de la imagen para compartir (og:image, 1200×630).
+  Regenerar desde la raíz del repo:
+    /usr/bin/python3 scripts/og/generar.py
+  Usa las fuentes de node_modules, el logo y la foto de src/assets. Sin precios: la imagen no vence cuando cambia una oferta.
+-->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Instrument Sans"; src: url("../../node_modules/@fontsource-variable/instrument-sans/files/instrument-sans-latin-wdth-normal.woff2") format("woff2"); font-weight: 400 700; font-stretch: 75% 100%; }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: "Instrument Sans", sans-serif; }
+  .lienzo { display: grid; grid-template-columns: 660px 540px; height: 630px; }
+  .texto { background: linear-gradient(135deg, #740d03 0%, #f20d28 100%); color: #fff; padding: 56px 60px; display: flex; flex-direction: column; justify-content: space-between; }
+  .logo { height: 58px; width: auto; align-self: flex-start; }
+  .antetitulo { font-size: 22px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .9; margin-bottom: 16px; }
+  h1 { font-size: 66px; font-weight: 700; font-stretch: 82%; line-height: 1.02; letter-spacing: -.012em; }
+  .pie { display: flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 650; font-stretch: 90%; }
+  .pie span { background: #fff; color: #16181c; padding: 10px 20px; border-radius: 999px; }
+  .foto { background: url("../../src/assets/fotos/mariano-pinzon.jpg") 50% 30% / cover no-repeat; }
+</style>
+</head>
+<body>
+  <div class="lienzo">
+    <div class="texto">
+      <img class="logo" src="../../src/assets/marca/logo-body-people.svg" alt="">
+      <div>
+        <p class="antetitulo">Gimnasio · Amarilo, Villavicencio</p>
+        <h1>Te armo tu plan y te acompaño cada mes.</h1>
+      </div>
+      <p class="pie"><span>Valoración de ingreso gratis</span></p>
+    </div>
+    <div class="foto"></div>
+  </div>
+</body>
+</html>

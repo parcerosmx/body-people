@@ -1,6 +1,6 @@
 # Pendientes — web nueva de Body People
 
-Actualizado el 15-sep-2026, al cerrar la **entrega 2 de 4** (sistema visual, hero y esqueleto).
+Actualizado el 15-sep-2026, al cerrar la **entrega 3 de 4** (SEO, schema y medición).
 
 ## Plan de entregas
 
@@ -8,8 +8,8 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 2 de 4** (sistema visual, her
 | --- | --- | --- |
 | 1 | Investigación y auditoría de la web actual → Artifact | ✅ 15-sep-2026 |
 | 2 | Sistema visual, stack, hero y esqueleto en celular, imágenes optimizadas | ✅ 15-sep-2026 |
-| 3 | Diseño fino de todas las secciones, reseñas, Pixel y eventos por intención, schema y SEO completo | ⏭️ siguiente |
-| 4 | Verificación (Lighthouse, Rich Results, enlaces), antes y después, dominio y DNS en Vercel, merge con aprobación | — |
+| 3 | Schema, og:image, robots y sitemap, Meta Pixel por intención, GA4 y Search Console listos, detalles | ✅ 15-sep-2026 |
+| 4 | Verificación (Rich Results, eventos de Meta), antes y después, dominio y DNS en Vercel, merge con aprobación | ⏭️ siguiente |
 
 ## Entrega 2 — en qué quedó
 
@@ -55,25 +55,68 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 2 de 4** (sistema visual, her
   - celular 390×844: el nombre del reto va como etiqueta sobre el precio.
 - ⏳ **Esperando el visto bueno de Andrés** sobre el preview antes de seguir.
 
-## ▶️ Entrega 3 — qué sigue
+## Entrega 3 — en qué quedó
 
-1. Ajustes que pida Andrés al revisar el preview; diseño fino restante.
-2. **Reseñas reales** de Google, copiadas tal cual con nombre y fecha, si Andrés da permiso.
-3. **Schema `ExerciseGym`** completo:
-   - NAP idéntico a Google, `geo`, `openingHoursSpecification` con el descanso de 2 a 4 y festivos;
-   - `priceRange`;
-   - `sameAs` con Instagram, Facebook y la ficha;
-   - `hasMap` con el CID.
-4. `og:image` de 1200×630 para compartir por WhatsApp, `robots.txt` y `sitemap`.
-5. **Meta Pixel** `989182581694959`:
-   - `PageView`;
-   - `Contact` o `Lead` por clic de WhatsApp o llamada, con `intencion` y `ubicacion` (los atributos ya están);
-   - quitar los valores viejos 80k, 250k y 420k.
-6. Proponer GA4 (`generate_lead`) y Search Console, que conecta Andrés.
-7. Detalles:
-   - el pie quedó dentro de `<main>` (sacarlo);
-   - la FAQ «nunca he ido» tiene intención `desde_cero`, pero todavía sin botón;
-   - revisar el copy del title y la description.
+- **Schema `ExerciseGym`** (`src/lib/schema.ts`, sale de `negocio.yml`):
+  - NAP igual a Google, `geo` y `hasMap` con el CID de la ficha nueva;
+  - horario agrupado con el descanso de 2 a 4, más los 7 festivos como `validFrom` / `validThrough`;
+  - `priceRange`, `makesOffer` (valoración, mensualidad, primer mes y reto si está activo);
+  - `amenityFeature`, `employee` (Mariano) y `sameAs` (Instagram, Facebook, Maps);
+  - **sin `aggregateRating`**.
+- **Compartir por WhatsApp:**
+  - `og:image` de 1200×630 (`public/og-body-people.jpg`, 94 KB), sin precios para que no quede vieja;
+  - se regenera con `/usr/bin/python3 scripts/og/generar.py`.
+- **Archivos para buscadores:**
+  - `robots.txt` y `sitemap.xml` generados;
+  - canonical `https://gimnasiobodypeople.com/` (se corrigió un `/index.html`);
+  - un solo H1 y `lang="es-CO"`.
+- **Meta Pixel** `989182581694959` (`src/components/Medicion.astro`):
+  - **carga después de la página**;
+  - `PageView`, más un evento por clic en todo enlace con `data-intencion`: WhatsApp y llamada → **`Contact`**,
+    «Cómo llegar» → **`FindLocation`**;
+  - parámetros: `content_name` = intención y `content_category` = ubicación;
+  - según Meta, `Lead` significa «registro completado», así que ya no se usa. Tampoco los valores viejos.
+  - **Verificado en el navegador:** los 12 botones llaman al Pixel con el evento y los parámetros correctos, y
+    el Pixel los cuenta. El teléfono del pie quedó medido.
+  - ⚠️ La librería de Meta no envía nada desde navegadores automatizados (tampoco la web actual). **La
+    recepción real se confirma en la entrega 4** en «Probar eventos» del Administrador de eventos.
+- **GA4 y Search Console listos para conectar** (ver propuesta abajo). Se activan solos al llenar
+  `medicion.ga4` y `medicion.search_console` en `negocio.yml`.
+- **Detalles:**
+  - el pie quedó fuera de `<main>`;
+  - la FAQ «Nunca he ido» tiene su botón de WhatsApp;
+  - los enlaces externos abren en pestaña nueva, así en el computador no se pierde la web;
+  - la meta description tiene 138 caracteres y el title 60.
+- **Lighthouse en celular con el Pixel:** 100 en rendimiento, accesibilidad, buenas prácticas y SEO. LCP 1,8 s,
+  TBT 30 ms, 253 KB.
+
+### Propuesta: GA4 y Search Console (los conecta Andrés)
+
+1. **Search Console:** crear una propiedad de **dominio** `gimnasiobodypeople.com` y verificarla con el
+   registro TXT en GoDaddy. Cubre apex, www, http y https.
+   - Si prefiere la etiqueta meta, pegar el `content` en `medicion.search_console`.
+   - Después de publicar, enviar `https://gimnasiobodypeople.com/sitemap.xml`.
+2. **GA4:**
+   - crear la propiedad «Gimnasio Body People» (zona horaria Bogotá, moneda COP) con un flujo web;
+   - pegar el ID `G-…` en `medicion.ga4`;
+   - marcar **`generate_lead`** como evento clave;
+   - registrar `intencion`, `ubicacion` y `canal` como dimensiones personalizadas de evento.
+3. **Enlazar Search Console con GA4** para ver búsquedas y conversiones juntas.
+
+## ▶️ Entrega 4 — qué sigue
+
+1. **Rich Results Test y validator.schema.org** sobre el preview (el schema está en el HTML).
+2. **Meta:** confirmar en «Probar eventos» que llegan `PageView`, `Contact` y `FindLocation` con sus parámetros.
+3. Revisar en un celular real los enlaces de WhatsApp, llamada y «Cómo llegar».
+4. **Capturas del antes y el después** (celular y escritorio).
+5. **Publicar, con aprobación de Andrés en cada paso:**
+   1. agregar `gimnasiobodypeople.com` y `www` al proyecto de Vercel, con redirección de www al apex;
+   2. cambiar el DNS en GoDaddy;
+   3. verificar HTTPS en apex y www;
+   4. merge a `main`;
+   5. apagar GitHub Pages.
+6. Lighthouse sobre el dominio publicado, Search Console y sitemap.
+7. **Antes de publicar:** definir las medidas de la garantía del reto, o dejar `garantia: ""`.
 
 ## Entrega 1 — en qué quedó
 
@@ -133,17 +176,16 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 2 de 4** (sistema visual, her
 
 ## Hallazgos que la web nueva tiene que corregir, sí o sí
 
-- [ ] `https://www.` da error de certificado, y el canonical, `og:url`, el schema y el sitemap apuntan ahí.
-  Hay que usar el apex sin www y arreglar el CNAME de www.
-- [ ] El mapa y el enlace llevan a la ficha VIEJA (CID `0x59a774c1888efa27`). Se cambian por la nueva:
+- [x] `https://www.` da error de certificado, y el canonical, `og:url`, el schema y el sitemap apuntan ahí. **En la web nueva todo apunta al apex; falta el DNS de www (entrega 4).**
+- [x] El mapa y el enlace llevan a la ficha VIEJA (CID `0x59a774c1888efa27`). Se cambian por la nueva:
   place_id `ChIJNcEnRtEvPo4RUXIANDDOJVQ`, CID `0x5425ce3034007251`.
-- [ ] El JSON-LD es inválido porque tiene comentarios `//`. Se reemplaza por `ExerciseGym` completo.
-- [ ] Hay 7 H1 y texto oculto a 1-2 px. Tiene que quedar un solo H1 y nada oculto.
-- [ ] `robots.txt` bloquea `*.xml`, así que bloquea el sitemap. El sitemap solo tiene `/tel:+57…`.
-- [ ] La imagen OG da 404 y la página tiene `lang="en"`.
-- [ ] Precios y planes viejos. El Pixel manda `Lead` con valores 80.000, 250.000 y 420.000.
-- [ ] Hay un contador de 2022 que tira un error cada segundo. jQuery y Montserrat bloquean el render.
-- [ ] HTTPS forzado está apagado.
+- [x] El JSON-LD es inválido porque tiene comentarios `//`. Se reemplaza por `ExerciseGym` completo.
+- [x] Hay 7 H1 y texto oculto a 1-2 px. Tiene que quedar un solo H1 y nada oculto.
+- [x] `robots.txt` bloquea `*.xml`, así que bloquea el sitemap. El sitemap solo tiene `/tel:+57…`.
+- [x] La imagen OG da 404 y la página tiene `lang="en"`.
+- [x] Precios y planes viejos. El Pixel manda `Lead` con valores 80.000, 250.000 y 420.000.
+- [x] Hay un contador de 2022 que tira un error cada segundo. jQuery y Montserrat bloquean el render.
+- [ ] HTTPS forzado está apagado. **Vercel lo trae activo; se resuelve al mover el DNS (entrega 4).**
 
 ## Datos útiles de la competencia (15-sep-2026)
 

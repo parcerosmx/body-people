@@ -24,6 +24,7 @@ export interface Negocio {
   servicios: string[];
   no_ofrece: string[];
   comodidades: string[];
+  medicion: { pixel_meta: string; ga4: string; search_console: string };
 }
 
 export const DIAS: Dia[] = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
@@ -48,6 +49,11 @@ function validar(d: any): Negocio {
     for (const k of ["precio", "continuidad", "personas_por_grupo"]) exigir(Number.isInteger(d?.reto?.[k]) && d.reto[k] > 0, `«reto.${k}» debe ser un número sin puntos`);
     exigir(Array.isArray(d?.reto?.incluye) && d.reto.incluye.length > 0, "«reto.incluye» necesita al menos un ítem");
   }
+
+  const m = d?.medicion ?? {};
+  exigir(m.pixel_meta === "" || /^\d{10,20}$/.test(String(m.pixel_meta ?? "")), "«medicion.pixel_meta» debe ser solo números, entre comillas, o \"\"");
+  exigir(m.ga4 === "" || /^G-[A-Z0-9]{4,}$/.test(String(m.ga4 ?? "")), "«medicion.ga4» debe verse como \"G-XXXXXXXXXX\" o quedar \"\"");
+  exigir(typeof m.search_console === "string", "«medicion.search_console» debe ir entre comillas (puede ser \"\")");
 
   if (errores.length) throw new Error(`negocio.yml tiene errores:\n - ${errores.join("\n - ")}`);
   return d as Negocio;

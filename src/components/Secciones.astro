@@ -65,7 +65,7 @@ const preguntas = [
     <ul class="objetivos">
       {negocio.programas.map((prog) => (
         <li>
-          <a class="objetivo" href={whatsapp(mensajeObjetivo(prog))} data-intencion={`objetivo:${prog.id}`} data-ubicacion="objetivos">
+          <a target="_blank" class="objetivo" href={whatsapp(mensajeObjetivo(prog))} data-intencion={`objetivo:${prog.id}`} data-ubicacion="objetivos" rel="noopener">
             <span class="objetivo__nombre">{prog.nombre}</span>
             <span class="objetivo__detalle">{prog.detalle}</span>
             <span class="objetivo__accion"><IconoWhatsApp size={16} /> Escribir con este objetivo</span>
@@ -100,7 +100,7 @@ const preguntas = [
       <h2 id="mariano-titulo">{entrenador.nombre}</h2>
       <p>{entrenador.titulo}. {entrenador.trayectoria}. Es el dueño del gimnasio y atiende a sus socios en el día a día.</p>
       <div class="fila-botones mariano__acciones">
-        <a class="boton boton--secundario" href={whatsapp(MENSAJES.mariano)} data-intencion="mariano" data-ubicacion="mariano"><IconoWhatsApp size={20} /> Escríbele a Mariano</a>
+        <a target="_blank" class="boton boton--secundario" href={whatsapp(MENSAJES.mariano)} data-intencion="mariano" data-ubicacion="mariano" rel="noopener"><IconoWhatsApp size={20} /> Escríbele a Mariano</a>
       </div>
     </div>
     <div class="mariano">
@@ -113,8 +113,8 @@ const preguntas = [
         <p class="resenas__nota"><span class="estrellas" aria-hidden="true">★★★★★</span> <strong>{google.calificacion}</strong> en Google</p>
         <p class="resenas__texto">Lee lo que dicen los socios en la ficha de Google del gimnasio.</p>
         <div class="fila-botones">
-          <a class="boton boton--secundario" href={mapaFicha()} rel="noopener">Ver reseñas en Google</a>
-          <a class="enlace-flecha" href={google.enlace_resenas} rel="noopener">¿Ya entrenas aquí? Deja tu reseña</a>
+          <a target="_blank" class="boton boton--secundario" href={mapaFicha()} rel="noopener">Ver reseñas en Google</a>
+          <a target="_blank" class="enlace-flecha" href={google.enlace_resenas} rel="noopener">¿Ya entrenas aquí? Deja tu reseña</a>
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@ const preguntas = [
           <p><span class="precio plan__precio">{pesos(reto.precio)}</span> <span class="plan__periodo">el mes</span></p>
           <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
           <p class="plan__nota">Si sigues, tu mensualidad queda congelada en {pesos(reto.continuidad)}.</p>
-          <a class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios"><IconoWhatsApp size={20} /> Quiero un cupo</a>
+          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero un cupo</a>
         </article>
       )}
       <article class="plan">
@@ -150,7 +150,7 @@ const preguntas = [
           <li>Clases grupales, funcional y TRX</li>
         </ul>
         <p class="plan__nota">El primer mes cuesta {pesos(precios.primer_mes)} porque incluye la inscripción.</p>
-        <a class={`boton ${reto.activo ? "boton--secundario" : "boton--principal"} boton--ancho`} href={whatsapp(MENSAJES.precios)} data-intencion="precios" data-ubicacion="precios"><IconoWhatsApp size={20} /> Agendar mi valoración gratis</a>
+        <a target="_blank" class={`boton ${reto.activo ? "boton--secundario" : "boton--principal"} boton--ancho`} href={whatsapp(MENSAJES.precios)} data-intencion="precios" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Agendar mi valoración gratis</a>
       </article>
     </div>
   </div>
@@ -193,9 +193,9 @@ const preguntas = [
       </address>
       <ul class="comodidades">{negocio.comodidades.map((c) => <li>{c}</li>)}</ul>
       <div class="fila-botones">
-        <a class="boton boton--principal" href={comoLlegar()} rel="noopener" data-intencion="como_llegar" data-ubicacion="horario">Cómo llegar</a>
+        <a target="_blank" class="boton boton--principal" href={comoLlegar()} rel="noopener" data-intencion="como_llegar" data-ubicacion="horario">Cómo llegar</a>
         <a class="boton boton--secundario" href={telefonoHref()} data-intencion="llamar" data-ubicacion="horario">Llamar {contacto.telefono.replace("+57 ", "")}</a>
-        <a class="enlace-flecha" href={whatsapp(MENSAJES.horario)} data-intencion="horario" data-ubicacion="horario">¿Qué horario me recomiendas?</a>
+        <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES.horario)} data-intencion="horario" data-ubicacion="horario" rel="noopener">¿Qué horario me recomiendas?</a>
       </div>
     </div>
     <figure class="fachada">
@@ -217,6 +217,7 @@ const preguntas = [
         <details>
           <summary>{q.p}</summary>
           <p>{q.r}</p>
+          {q.intencion && <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES[q.intencion])} data-intencion={q.intencion} data-ubicacion="preguntas" rel="noopener">Escríbenos y te contamos cómo empezar</a>}
         </details>
       ))}
     </div>
@@ -228,24 +229,10 @@ const preguntas = [
   <div class="contenedor cierre__caja">
     <h2 id="cierre-titulo">{reto.activo ? `Empieza el ${reto.nombre}` : "Empieza con tu valoración gratis"}</h2>
     <p>Escríbenos por WhatsApp y agendamos tu valoración de ingreso.</p>
-    <a class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero un cupo del reto" : "Agendar mi valoración gratis"}</a>
+    <a target="_blank" class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre" rel="noopener"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero un cupo del reto" : "Agendar mi valoración gratis"}</a>
   </div>
 </section>
 
-<footer class="pie">
-  <div class="contenedor pie__fila">
-    <div>
-      <p><strong>{negocio.nombre}</strong></p>
-      <p>{direccionCompleta()}</p>
-      <p><a href={telefonoHref()}>{contacto.telefono}</a></p>
-    </div>
-    <ul class="pie__enlaces">
-      <li><a href={contacto.instagram} rel="noopener">Instagram</a></li>
-      <li><a href={contacto.facebook} rel="noopener">Facebook</a></li>
-      <li><a href={mapaFicha()} rel="noopener">Google Maps</a></li>
-    </ul>
-  </div>
-</footer>
 
 <style>
   .fila-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
@@ -304,21 +291,18 @@ const preguntas = [
   .acordeon summary::-webkit-details-marker { display: none; }
   .acordeon summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; font-weight: 400; color: var(--tenue); }
   .acordeon details[open] summary::after { content: "–"; }
-  .acordeon details p { padding: 0 0 18px; color: var(--tinta-2); }
+  .acordeon details p { padding: 0 0 12px; color: var(--tinta-2); }
+  .acordeon details .enlace-flecha { display: inline-block; margin-bottom: 18px; font-size: var(--t-s); }
 
   .cierre { background: var(--marca); color: #fff; padding-block: 56px; }
   .cierre__caja { display: grid; gap: 14px; justify-items: start; }
   .cierre .boton--principal { background: #fff; color: var(--tinta); }
   .cierre .boton--principal svg { color: #1faf38; }
 
-  .pie { padding-block: 32px; font-size: var(--t-s); color: var(--tinta-2); }
-  .pie__fila { display: grid; gap: 16px; }
-  .pie__enlaces { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 16px; }
 
   @media (min-width: 760px) {
     .objetivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .planes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .pie__fila { grid-template-columns: 1fr auto; align-items: end; }
   }
   @media (min-width: 960px) {
     .objetivos { grid-template-columns: repeat(4, minmax(0, 1fr)); }

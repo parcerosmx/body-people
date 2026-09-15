@@ -15,7 +15,7 @@ const mensaje = negocio.reto.activo ? MENSAJES.reto : MENSAJES.valoracion;
       <a href="#horario">Horario</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="encabezado__wa" href={whatsapp(mensaje)} data-intencion={negocio.reto.activo ? "reto" : "valoracion"} data-ubicacion="encabezado">
+    <a target="_blank" class="encabezado__wa" href={whatsapp(mensaje)} data-intencion={negocio.reto.activo ? "reto" : "valoracion"} data-ubicacion="encabezado" rel="noopener">
       <IconoWhatsApp size={20} />
       <span class="solo-movil">Escríbenos</span>
       <span class="solo-escritorio">{negocio.reto.activo ? `Quiero un cupo del ${negocio.reto.nombre}` : "Agendar mi valoración gratis"}</span>

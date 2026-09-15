@@ -20,7 +20,7 @@ const { reto, precios, entrenador, google } = negocio;
       class="hero__img"
     />
     <div class="hero__chips">
-      <a class="chip" href={mapaFicha()} rel="noopener">
+      <a target="_blank" class="chip" href={mapaFicha()} rel="noopener">
         <span class="estrellas" aria-hidden="true">★</span> {google.calificacion} en Google
       </a>
       <EstadoAbierto />
@@ -41,7 +41,7 @@ const { reto, precios, entrenador, google } = negocio;
           <p class="oferta__precio"><span class="precio">{pesos(reto.precio)}</span><span class="oferta__nota">el mes{reto.sin_permanencia && <><br />sin permanencia</>}</span></p>
         </div>
         <div class="oferta__cuerpo">
-          <a class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="hero" data-cta-hero>
+          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="hero" data-cta-hero rel="noopener">
             <IconoWhatsApp size={22} />
             Quiero un cupo del reto
           </a>
@@ -59,7 +59,7 @@ const { reto, precios, entrenador, google } = negocio;
           <p class="oferta__precio"><span class="precio">Gratis</span><span class="oferta__nota">mensualidad<br />{pesos(precios.mensualidad)}</span></p>
         </div>
         <div class="oferta__cuerpo">
-          <a class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.valoracion)} data-intencion="valoracion" data-ubicacion="hero" data-cta-hero>
+          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.valoracion)} data-intencion="valoracion" data-ubicacion="hero" data-cta-hero rel="noopener">
             <IconoWhatsApp size={22} />
             Agendar mi valoración gratis
           </a>
@@ -73,7 +73,7 @@ const { reto, precios, entrenador, google } = negocio;
     )}
 
     {reto.activo && precios.valoracion_gratis && (
-      <p class="hero__alterna">¿Solo quieres conocer? <a class="enlace-flecha" href={whatsapp(MENSAJES.valoracion)} data-intencion="valoracion" data-ubicacion="hero-alterna">La valoración de ingreso es gratis</a></p>
+      <p class="hero__alterna">¿Solo quieres conocer? <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES.valoracion)} data-intencion="valoracion" data-ubicacion="hero-alterna" rel="noopener">La valoración de ingreso es gratis</a></p>
     )}
   </div>
 </section>
