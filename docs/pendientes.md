@@ -1,6 +1,10 @@
 # Pendientes — web nueva de Body People
 
-Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva está publicada en https://gimnasiobodypeople.com** (Vercel).
+Actualizado el 15-sep-2026. **La web está publicada en https://gimnasiobodypeople.com** (Vercel), con el
+**Reto 30 días «No hay excusas»** en línea desde el 15-sep (PR #5).
+
+- Lighthouse en celular sobre el dominio publicado: **99-100 / 100 / 100 / 100**, LCP 1,6-1,7 s, 344 KB.
+- Capturas del sitio publicado en `bodypeople-maps/docs/web-investigacion/antes-despues/publicado-*.jpg`.
 
 ## Plan de entregas
 
