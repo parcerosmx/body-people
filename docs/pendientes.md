@@ -103,6 +103,30 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
    - registrar `intencion`, `ubicacion` y `canal` como dimensiones personalizadas de evento.
 3. **Enlazar Search Console con GA4** para ver búsquedas y conversiones juntas.
 
+## Cambio de oferta y logo (15-sep-2026, pedido por Andrés)
+
+- **Logo 2024** (el de la camiseta de Mariano): escudo rojo «BODY (B) PEOPLE GIMNASIO», en
+  `src/assets/marca/logo-escudo-2024.png` (500×174, transparente).
+  - No existe versión vectorial ni más grande: se buscó en iCloud (los PDF de 2022 traen el logo viejo), en Drive
+    y en las piezas de Facebook.
+  - Va en el encabezado y en la imagen para compartir; el favicon sigue siendo la «B».
+- **Reto 30 días · No hay excusas:**
+  - $69.900 **primer mes**, con la inscripción incluida;
+  - desde el segundo mes, la mensualidad normal de **$105.000** (se quitó la continuidad de $99.900);
+  - incluye valoración inicial, plan de entrenamiento, acompañamiento semipersonalizado y garantía;
+  - **no incluye plan nutricional**, que sigue en la mensualidad normal;
+  - garantía: «si entrenas mínimo 3 veces por semana y no se cumplen tus objetivos, el segundo mes es gratis»;
+  - «reto para solo 25 personas».
+- ⚠️ **Frase «La mensualidad más económica de la ciudad»:** Andrés la decidió asumiendo el riesgo. La investigación
+  encontró entradas más baratas con permanencia o pago anticipado (Smart Fit $19.900 × 2 meses, HYL ~$59.775/mes).
+  Vive en `reto.comparacion` y se apaga dejándola vacía.
+- **Hero nuevo:** «Te reto a empezar. Yo te acompaño.» Sección nueva **«No hay excusas»**
+  (`src/components/Excusas.astro`) con cada excusa tachada: costo, motivación y «¿y si no funciona?».
+- La imagen para compartir dice «No hay excusas · Solo 25 personas»: **regenerarla si se apaga el reto**
+  (`scripts/og/generar.py`).
+- ⚠️ **El guion del video** (`bodypeople-maps/video-reto-30-dias.md`) todavía dice $99.900, 12 sesiones y plan de
+  alimentación: hay que alinearlo antes de pautar.
+
 ## ▶️ Lo que queda (en orden)
 
 1. ✅ **GitHub Pages apagado** (15-sep-2026). La rama de origen quedó en «None» y `andrestntx.github.io/body-people` da 404.

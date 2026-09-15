@@ -30,26 +30,28 @@ const { reto, precios, entrenador, google } = negocio;
   <div class="hero__texto">
     <h1 id="hero-titulo">
       <span class="antetitulo">{negocio.nombre} · Amarilo, Villavicencio</span>
-      Soy Mariano. Te armo tu plan y te acompaño cada mes.
+      {reto.activo ? "Te reto a empezar. Yo te acompaño." : "Soy Mariano. Te armo tu plan y te acompaño cada mes."}
     </h1>
-    <p class="hero__bajada">{entrenador.titulo}. {entrenador.trayectoria}.</p>
+    <p class="hero__bajada">Soy {entrenador.nombre}, {entrenador.titulo.charAt(0).toLowerCase() + entrenador.titulo.slice(1)}. Te guío desde el primer día para que logres tus objetivos.</p>
 
     {reto.activo ? (
       <div class="oferta" id="oferta">
         <div class="oferta__cabeza">
-          <p class="oferta__nombre">{reto.nombre}</p>
-          <p class="oferta__precio"><span class="precio">{pesos(reto.precio)}</span><span class="oferta__nota">el mes{reto.sin_permanencia && <><br />sin permanencia</>}</span></p>
+          <p class="oferta__nombre">{reto.nombre} · {reto.lema}</p>
+          <p class="oferta__precio"><span class="precio">{pesos(reto.precio)}</span><span class="oferta__nota">tu primer mes{reto.incluye_inscripcion && <><br />inscripción incluida</>}</span></p>
+          {reto.comparacion && <p class="oferta__comparacion">{reto.comparacion}</p>}
         </div>
         <div class="oferta__cuerpo">
-          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="hero" data-cta-hero rel="noopener">
+          <p class="oferta__cupos"><span class="oferta__pulso" aria-hidden="true"></span>Reto para solo {reto.personas_por_grupo} personas</p>
+          <a class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="hero" data-cta-hero>
             <IconoWhatsApp size={22} />
-            Quiero un cupo del reto
+            Quiero mi cupo en el reto
           </a>
           <ul class="lista-check">
             {reto.incluye.map((item) => <li>{item}</li>)}
           </ul>
           {reto.garantia && <p class="oferta__garantia"><strong>Garantía:</strong> {reto.garantia}</p>}
-          <p class="oferta__letra">Grupos de {reto.personas_por_grupo} personas que arrancan juntos. Si sigues después del reto, tu mensualidad queda congelada en {pesos(reto.continuidad)}.</p>
+          <p class="oferta__letra">Desde el segundo mes pagas la mensualidad normal de {pesos(precios.mensualidad)}{reto.sin_permanencia ? ", sin permanencia" : ""}.</p>
         </div>
       </div>
     ) : (
@@ -93,6 +95,10 @@ const { reto, precios, entrenador, google } = negocio;
   .oferta { border-radius: var(--radio); background: var(--papel); box-shadow: 0 0 0 1px var(--linea), var(--sombra); overflow: hidden; margin-top: 4px; }
   .oferta__cabeza { background: var(--marca); color: #fff; padding: 14px 18px 16px; display: grid; gap: 6px; }
   .oferta__nombre { font-weight: 700; font-size: var(--t-xs); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.1; }
+  .oferta__comparacion { font-size: var(--t-s); font-weight: 650; font-stretch: 90%; padding-top: 8px; border-top: 1px solid rgb(255 255 255 / 0.3); }
+  .oferta__cupos { display: flex; align-items: center; gap: 8px; font-size: var(--t-s); font-weight: 650; color: var(--rojo); }
+  .oferta__pulso { width: 10px; height: 10px; border-radius: 50%; background: var(--rojo); box-shadow: 0 0 0 0 rgb(209 15 42 / 0.5); animation: pulso 1.8s ease-out infinite; }
+  @keyframes pulso { 70% { box-shadow: 0 0 0 8px rgb(209 15 42 / 0); } 100% { box-shadow: 0 0 0 0 rgb(209 15 42 / 0); } }
   .oferta__precio { display: flex; align-items: flex-end; gap: 10px; }
   .oferta__precio .precio { font-size: 3.25rem; }
   .oferta__nota { font-size: var(--t-xs); font-weight: 600; line-height: 1.25; padding-bottom: 2px; opacity: .95; }
@@ -112,7 +118,6 @@ const { reto, precios, entrenador, google } = negocio;
     .hero__chips { left: 20px; bottom: 20px; }
     .hero__texto { order: 1; padding: 0; gap: 18px; }
     .oferta { max-width: 540px; }
-    .oferta__cabeza { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 16px 18px 14px; }
-    .oferta__nombre { font-size: var(--t-l); font-stretch: 85%; letter-spacing: -0.01em; text-transform: none; max-width: 6em; }
+    .oferta__cabeza { padding: 16px 20px 16px; }
   }
 </style>

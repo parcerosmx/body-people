@@ -35,17 +35,26 @@ const filasHorario = semanaIgual
 const metodo = [
   { titulo: "Valoración de ingreso", texto: "Conocemos tus objetivos, tu estilo de vida y tus medidas iniciales, para que el plan se adapte a ti." },
   { titulo: "Plan de entrenamiento", texto: "Diseñado según tus objetivos, con un periodo de adaptación para evitar lesiones y dolores innecesarios." },
-  { titulo: "Plan nutricional", texto: "Se adapta a tu estilo de vida y tus gustos. No necesitas dietas difíciles ni castigarte." },
+  { titulo: "Plan nutricional", texto: "Con la mensualidad normal recibes un plan que se adapta a tu estilo de vida y tus gustos. No necesitas dietas difíciles ni castigarte." },
   { titulo: "Control mensual", texto: "Cada mes evaluamos tu avance y ajustamos el plan a tus nuevas metas." },
 ];
 
 const preguntas = [
   {
     p: "¿Cuánto cuesta?",
-    r: `La mensualidad es de ${pesos(precios.mensualidad)}. El primer mes cuesta ${pesos(precios.primer_mes)} porque incluye la inscripción.${reto.activo ? ` Ahora mismo también está el ${reto.nombre} por ${pesos(reto.precio)}.` : ""} La valoración de ingreso es gratis.`,
+    r: reto.activo
+      ? `Con el ${reto.nombre}, tu primer mes cuesta ${pesos(reto.precio)}${reto.incluye_inscripcion ? " con la inscripción incluida" : ""}. Desde el segundo mes pagas la mensualidad normal de ${pesos(precios.mensualidad)}.`
+      : `La mensualidad es de ${pesos(precios.mensualidad)}. El primer mes cuesta ${pesos(precios.primer_mes)} porque incluye la inscripción. La valoración de ingreso es gratis.`,
   },
+  ...(reto.activo
+    ? [
+        { p: `¿Qué incluye el ${reto.nombre}?`, r: `${reto.incluye.join(", ")}. No incluye plan nutricional; ese viene con la mensualidad normal.`, intencion: "reto" as const },
+        ...(reto.garantia ? [{ p: "¿Cómo funciona la garantía?", r: reto.garantia }] : []),
+        { p: "¿Qué pasa cuando termina el reto?", r: `Sigues entrenando con la mensualidad normal de ${pesos(precios.mensualidad)}${reto.sin_permanencia ? ". El reto no tiene permanencia" : ""}.` },
+      ]
+    : []),
   { p: "Nunca he ido a un gimnasio, ¿es para mí?", r: "Sí. La atención es semipersonalizada y empiezas con un periodo de adaptación, para aprender y entrenar sin lesionarte.", intencion: "desde_cero" as const },
-  { p: "¿Qué hacen en la valoración de ingreso?", r: "Revisamos tus objetivos, tu estilo de vida y tus medidas. Con eso se arma tu plan de entrenamiento y tu plan nutricional." },
+  { p: "¿Qué hacen en la valoración de ingreso?", r: "Revisamos tus objetivos, tu estilo de vida y tus medidas. Con eso se arma tu plan de entrenamiento; el plan nutricional viene con la mensualidad normal." },
   { p: `¿Hay ${negocio.no_ofrece.map((s) => s.toLowerCase()).join(" o ")}?`, r: `No. Lo que sí hay: ${negocio.servicios.map((s) => s.toLowerCase()).join(", ")}.` },
   { p: "¿Tienen parqueadero?", r: `Sí, ${negocio.comodidades.find((c) => /parqueadero/i.test(c))?.toLowerCase() ?? "parqueadero"}. También Wi-Fi gratis, baños y entrada accesible.` },
   { p: "¿Cómo puedo pagar?", r: "Con tarjeta débito y crédito." },
@@ -132,10 +141,11 @@ const preguntas = [
     <div class="planes">
       {reto.activo && (
         <article class="plan plan--destacado">
-          <p class="plan__nombre">{reto.nombre}</p>
-          <p><span class="precio plan__precio">{pesos(reto.precio)}</span> <span class="plan__periodo">el mes</span></p>
-          <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
-          <p class="plan__nota">Si sigues, tu mensualidad queda congelada en {pesos(reto.continuidad)}.</p>
+          <p class="plan__nombre">{reto.nombre} · {reto.lema}</p>
+          <p><span class="precio plan__precio">{pesos(reto.precio)}</span> <span class="plan__periodo">primer mes</span></p>
+          {reto.comparacion && <p class="plan__destaque">{reto.comparacion}</p>}
+          <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.incluye_inscripcion && <li>Inscripción incluida</li>}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
+          <p class="plan__nota">Solo {reto.personas_por_grupo} personas por reto. No incluye plan nutricional. Desde el segundo mes pagas la mensualidad normal de {pesos(precios.mensualidad)}.</p>
           <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero un cupo</a>
         </article>
       )}
@@ -217,7 +227,7 @@ const preguntas = [
         <details>
           <summary>{q.p}</summary>
           <p>{q.r}</p>
-          {q.intencion && <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES[q.intencion])} data-intencion={q.intencion} data-ubicacion="preguntas" rel="noopener">Escríbenos y te contamos cómo empezar</a>}
+          {q.intencion && <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES[q.intencion])} data-intencion={q.intencion} data-ubicacion="preguntas" rel="noopener">{q.intencion === "reto" ? "Quiero mi cupo en el reto" : "Escríbenos y te contamos cómo empezar"}</a>}
         </details>
       ))}
     </div>
@@ -227,9 +237,9 @@ const preguntas = [
 <!-- Cierre -->
 <section class="cierre" aria-labelledby="cierre-titulo">
   <div class="contenedor cierre__caja">
-    <h2 id="cierre-titulo">{reto.activo ? `Empieza el ${reto.nombre}` : "Empieza con tu valoración gratis"}</h2>
-    <p>Escríbenos por WhatsApp y agendamos tu valoración de ingreso.</p>
-    <a target="_blank" class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre" rel="noopener"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero un cupo del reto" : "Agendar mi valoración gratis"}</a>
+    <h2 id="cierre-titulo">{reto.activo ? "Te reto a empezar" : "Empieza con tu valoración gratis"}</h2>
+    <p>{reto.activo ? `${reto.nombre}: ${pesos(reto.precio)} tu primer mes. Solo ${reto.personas_por_grupo} personas por reto.` : "Escríbenos por WhatsApp y agendamos tu valoración de ingreso."}</p>
+    <a target="_blank" class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre" rel="noopener"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero mi cupo en el reto" : "Agendar mi valoración gratis"}</a>
   </div>
 </section>
 
@@ -267,6 +277,7 @@ const preguntas = [
   .plan__periodo { color: var(--tenue); font-size: var(--t-s); }
   .plan .lista-check { font-size: var(--t-s); }
   .plan__nota { font-size: var(--t-xs); color: var(--tenue); }
+  .plan__destaque { font-weight: 650; color: var(--rojo); font-size: var(--t-s); }
   .plan .boton { font-size: var(--t-s); padding-inline: 14px; }
 
   .galeria { list-style: none; margin: 0; padding: 0 var(--gutter) 6px; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); }

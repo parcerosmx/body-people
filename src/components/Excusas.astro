@@ -1,0 +1,64 @@
+---
+/**
+ * «No hay excusas»: el mensaje del reto. Lo más difícil es empezar y las excusas de siempre son el costo y la
+ * motivación. Cada excusa aparece tachada con su respuesta. Solo se muestra con el reto activo.
+ */
+import IconoWhatsApp from "./IconoWhatsApp.astro";
+import { negocio, pesos, whatsapp, MENSAJES } from "../lib/negocio";
+
+const { reto, precios } = negocio;
+const excusas = [
+  {
+    excusa: "Es muy caro",
+    respuesta: `Tu primer mes cuesta ${pesos(reto.precio)}`,
+    detalle: [reto.comparacion, reto.incluye_inscripcion ? "Inscripción incluida" : "", reto.sin_permanencia ? "sin permanencia" : ""]
+      .filter(Boolean).join(". ").replace(". sin", ", sin") + ".",
+  },
+  {
+    excusa: "No me motivo solo",
+    respuesta: "Yo te acompaño",
+    detalle: "Empiezas con una valoración inicial, sales con tu plan de entrenamiento y entrenas con acompañamiento semipersonalizado.",
+  },
+  ...(reto.garantia
+    ? [{ excusa: "¿Y si no me funciona?", respuesta: "El segundo mes es gratis", detalle: reto.garantia }]
+    : []),
+];
+---
+{reto.activo && (
+  <section class="seccion excusas" id="no-hay-excusas" aria-labelledby="excusas-titulo">
+    <div class="contenedor partida">
+      <div class="seccion__cabeza">
+        <p class="antetitulo">{reto.nombre} · {reto.lema}</p>
+        <h2 id="excusas-titulo">Lo más difícil es empezar.</h2>
+        <p>Casi siempre la excusa es el costo o la motivación. En este reto te quitamos las dos, y si entrenas y no ves resultados, el segundo mes va por nuestra cuenta.</p>
+        <div class="excusas__accion">
+          <a class="boton boton--principal" target="_blank" rel="noopener" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="no-hay-excusas"><IconoWhatsApp size={20} /> Acepto el reto</a>
+          <p class="excusas__cupos">Solo {reto.personas_por_grupo} personas por reto. Desde el segundo mes, {pesos(precios.mensualidad)}.</p>
+        </div>
+      </div>
+      <ul class="excusas__lista">
+        {excusas.map((e) => (
+          <li>
+            <p class="excusas__excusa"><s>«{e.excusa}»</s></p>
+            <h3>{e.respuesta}</h3>
+            <p class="excusas__detalle">{e.detalle}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .excusas { background: var(--tinta); color: #fff; }
+  .excusas :global(.antetitulo) { color: rgb(255 255 255 / 0.7); }
+  .excusas .seccion__cabeza p { color: rgb(255 255 255 / 0.82); }
+  .excusas__accion { display: grid; gap: 10px; justify-items: start; margin-top: 10px; }
+  .excusas__cupos { font-size: var(--t-s); }
+  .excusas__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .excusas__lista li { display: grid; gap: 6px; padding: 20px 22px; border-radius: var(--radio); background: rgb(255 255 255 / 0.06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1); }
+  .excusas__excusa { font-size: var(--t-l); font-stretch: 90%; color: rgb(255 255 255 / 0.62); }
+  .excusas__excusa s { text-decoration-color: var(--rojo-vivo); text-decoration-thickness: 3px; }
+  .excusas__lista h3 { font-size: var(--t-xl); color: #fff; }
+  .excusas__detalle { color: rgb(255 255 255 / 0.82); font-size: var(--t-s); }
+</style>
