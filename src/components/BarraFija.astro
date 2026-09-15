@@ -11,7 +11,7 @@ const reto = negocio.reto.activo;
 <div class="barra" data-barra>
   <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(reto ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto ? "reto" : "valoracion"} data-ubicacion="barra-fija" rel="noopener">
     <IconoWhatsApp size={22} />
-    {reto ? `Quiero un cupo del ${negocio.reto.nombre}` : "Agendar mi valoración gratis"}
+    {reto ? "Quiero mi cupo en el reto" : "Agendar mi valoración gratis"}
   </a>
 </div>
 

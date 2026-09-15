@@ -67,39 +67,54 @@ precios:
   primer_mes: 120000 # incluye la inscripción
   valoracion_gratis: true
 
-# Reto 30 días. Para apagarlo, cambiar "activo: true" por "activo: false":
+# Reto 30 días: «No hay excusas». Para apagarlo, cambiar "activo: true" por "activo: false":
 # la web vuelve a abrir con la valoración de ingreso gratis.
 # No lleva fecha de fin a propósito (decisión de Andrés, 15-sep-2026).
 reto:
   activo: true
   nombre: Reto 30 días
-  precio: 69900
-  continuidad: 99900 # mensualidad congelada para quien sigue después del reto
+  lema: No hay excusas
+  precio: 69900 # primer mes del reto, con la inscripción incluida
+  incluye_inscripcion: true
   sin_permanencia: true
-  personas_por_grupo: 25
+  personas_por_grupo: 25 # «reto para solo 25 personas»: no inventar cupos restantes
+  # Desde el segundo mes se paga la mensualidad normal (precios.mensualidad).
   incluye:
-    - Valoración de ingreso con medidas
-    - Plan de entrenamiento y de alimentación hecho por Mariano
-    - Revisión a mitad de mes
-    - Medición final
-  # ⚠️ Antes de publicar, definir qué medidas cuentan (cintura, cadera, peso, % grasa).
+    - Valoración inicial
+    - Plan de entrenamiento
+    - Acompañamiento semipersonalizado
+    - Garantía de resultados
+  # ⚠️ Frase comparativa decidida por Andrés el 15-sep-2026, asumiendo el riesgo: la investigación del
+  # 15-sep encontró precios de entrada más bajos con permanencia o pago anticipado (Smart Fit, HYL).
+  # Si se deja vacía (comparacion: ""), la web no la muestra.
+  comparacion: La mensualidad más económica de la ciudad
   # Si se deja vacío (garantia: ""), la web no la muestra.
-  garantia: Si entrenas mínimo 12 veces en el mes y tus medidas no cambian, el segundo mes es gratis.
+  garantia: Si entrenas mínimo 3 veces por semana y no se cumplen tus objetivos, el segundo mes es gratis.
 
+# imagen_ia: true indica que la imagen fue generada con IA (sin rótulo visible, decisión de Andrés del 15-sep-2026).
+# Nunca presentarlas como socios, testimonios ni resultados.
 programas:
   - id: bajar-de-peso
+    imagen: ia-bajar-de-peso.webp # en src/assets/fotos/
+    imagen_ia: true
     nombre: Bajar de peso y quemar grasa
     corto: Bajar de peso
-    detalle: Alimentación, circuitos y rutinas de fuerza para quemar grasa de forma progresiva.
+    detalle: Circuitos y rutinas de fuerza para quemar grasa de forma progresiva.
   - id: piernas-gluteos
+    imagen: ia-piernas-gluteos.webp # en src/assets/fotos/
+    imagen_ia: true
     nombre: Tonificar piernas y glúteos
     corto: Piernas y glúteos
     detalle: Ganancia muscular enfocada en piernas y glúteos, dentro de tu plan de entrenamiento.
   - id: masa-muscular
+    imagen: ia-masa-muscular.webp # en src/assets/fotos/
+    imagen_ia: true
     nombre: Ganar masa muscular
     corto: Ganar músculo
-    detalle: Plan de fuerza progresivo y alimentación que prioriza cuidar y aumentar tu masa muscular.
+    detalle: Plan de fuerza progresivo para cuidar y aumentar tu masa muscular.
   - id: desde-cero
+    imagen: entrenamiento-cajon.jpg # en src/assets/fotos/
+    imagen_ia: false
     nombre: Empezar desde cero
     corto: Empezar desde cero
     detalle: Periodo de adaptación para aprender las máquinas y entrenar sin lesionarte.

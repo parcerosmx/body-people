@@ -12,8 +12,8 @@ import {
 } from "../lib/negocio";
 import fachada from "../assets/fotos/fachada.jpg";
 
-const fotos = import.meta.glob<{ default: ImageMetadata }>("../assets/fotos/*.jpg", { eager: true });
-const foto = (n: string) => fotos[`../assets/fotos/${n}.jpg`].default;
+const fotos = import.meta.glob<{ default: ImageMetadata }>("../assets/fotos/*.{jpg,webp}", { eager: true });
+const foto = (n: string) => (fotos[`../assets/fotos/${n}`] ?? fotos[`../assets/fotos/${n}.jpg`]).default;
 const galeria = [
   { src: foto("zona-maquinas"), alt: "Zona de máquinas de Body People vista desde el segundo piso" },
   { src: foto("entrenamiento-cajon"), alt: "Entrenamiento con cajón y acompañamiento del entrenador" },
@@ -32,20 +32,36 @@ const filasHorario = semanaIgual
   ? [{ dia: "Lunes a viernes", franjas: horario.lunes }, { dia: "Sábado", franjas: horario.sabado }, { dia: "Domingo", franjas: horario.domingo }, { dia: "Festivos", franjas: horario.festivo }]
   : [...DIAS.map((d) => ({ dia: nombreDia[d], franjas: horario[d] })), { dia: "Festivos", franjas: horario.festivo }];
 
+const pasosReto = [
+  { titulo: "Pide tu cupo", texto: `Escríbenos por WhatsApp con el botón. El reto es para solo ${reto.personas_por_grupo} personas.` },
+  { titulo: "Valoración inicial", texto: "Conocemos tus objetivos, tu estilo de vida y tus medidas iniciales." },
+  { titulo: "Entrenas con plan y acompañamiento", texto: "Mínimo 3 veces por semana, con tu plan de entrenamiento y acompañamiento semipersonalizado." },
+  { titulo: "Resultados o el segundo mes gratis", texto: `${reto.garantia || "Te acompañamos hasta que veas el avance."} Desde el segundo mes, ${pesos(precios.mensualidad)}.` },
+];
+
 const metodo = [
   { titulo: "Valoración de ingreso", texto: "Conocemos tus objetivos, tu estilo de vida y tus medidas iniciales, para que el plan se adapte a ti." },
   { titulo: "Plan de entrenamiento", texto: "Diseñado según tus objetivos, con un periodo de adaptación para evitar lesiones y dolores innecesarios." },
-  { titulo: "Plan nutricional", texto: "Se adapta a tu estilo de vida y tus gustos. No necesitas dietas difíciles ni castigarte." },
+  { titulo: "Plan nutricional", texto: "Con la mensualidad normal recibes un plan que se adapta a tu estilo de vida y tus gustos. No necesitas dietas difíciles ni castigarte." },
   { titulo: "Control mensual", texto: "Cada mes evaluamos tu avance y ajustamos el plan a tus nuevas metas." },
 ];
 
 const preguntas = [
   {
     p: "¿Cuánto cuesta?",
-    r: `La mensualidad es de ${pesos(precios.mensualidad)}. El primer mes cuesta ${pesos(precios.primer_mes)} porque incluye la inscripción.${reto.activo ? ` Ahora mismo también está el ${reto.nombre} por ${pesos(reto.precio)}.` : ""} La valoración de ingreso es gratis.`,
+    r: reto.activo
+      ? `Con el ${reto.nombre}, tu primer mes cuesta ${pesos(reto.precio)}${reto.incluye_inscripcion ? " con la inscripción incluida" : ""}. Desde el segundo mes pagas la mensualidad normal de ${pesos(precios.mensualidad)}.`
+      : `La mensualidad es de ${pesos(precios.mensualidad)}. El primer mes cuesta ${pesos(precios.primer_mes)} porque incluye la inscripción. La valoración de ingreso es gratis.`,
   },
+  ...(reto.activo
+    ? [
+        { p: `¿Qué incluye el ${reto.nombre}?`, r: `${reto.incluye.join(", ")}. No incluye plan nutricional; ese viene con la mensualidad normal.`, intencion: "reto" as const },
+        ...(reto.garantia ? [{ p: "¿Cómo funciona la garantía?", r: reto.garantia }] : []),
+        { p: "¿Qué pasa cuando termina el reto?", r: `Sigues entrenando con la mensualidad normal de ${pesos(precios.mensualidad)}${reto.sin_permanencia ? ". El reto no tiene permanencia" : ""}.` },
+      ]
+    : []),
   { p: "Nunca he ido a un gimnasio, ¿es para mí?", r: "Sí. La atención es semipersonalizada y empiezas con un periodo de adaptación, para aprender y entrenar sin lesionarte.", intencion: "desde_cero" as const },
-  { p: "¿Qué hacen en la valoración de ingreso?", r: "Revisamos tus objetivos, tu estilo de vida y tus medidas. Con eso se arma tu plan de entrenamiento y tu plan nutricional." },
+  { p: "¿Qué hacen en la valoración de ingreso?", r: "Revisamos tus objetivos, tu estilo de vida y tus medidas. Con eso se arma tu plan de entrenamiento; el plan nutricional viene con la mensualidad normal." },
   { p: `¿Hay ${negocio.no_ofrece.map((s) => s.toLowerCase()).join(" o ")}?`, r: `No. Lo que sí hay: ${negocio.servicios.map((s) => s.toLowerCase()).join(", ")}.` },
   { p: "¿Tienen parqueadero?", r: `Sí, ${negocio.comodidades.find((c) => /parqueadero/i.test(c))?.toLowerCase() ?? "parqueadero"}. También Wi-Fi gratis, baños y entrada accesible.` },
   { p: "¿Cómo puedo pagar?", r: "Con tarjeta débito y crédito." },
@@ -61,11 +77,15 @@ const preguntas = [
       <p class="antetitulo">Programas</p>
       <h2 id="objetivos-titulo">¿Qué quieres lograr?</h2>
       <p>Toca tu objetivo y escríbeme por WhatsApp. El mensaje ya va escrito.</p>
+      <p class="objetivos__pista" aria-hidden="true">Desliza para ver los 4 →</p>
     </div>
     <ul class="objetivos">
       {negocio.programas.map((prog) => (
         <li>
           <a target="_blank" class="objetivo" href={whatsapp(mensajeObjetivo(prog))} data-intencion={`objetivo:${prog.id}`} data-ubicacion="objetivos" rel="noopener">
+            <span class="objetivo__foto">
+              <Picture src={foto(prog.imagen)} formats={["avif", "webp"]} widths={[320, 640]} sizes="(min-width: 960px) 270px, (min-width: 760px) 45vw, 90vw" alt={prog.imagen_ia ? `Persona entrenando para ${prog.nombre.toLowerCase()}` : `${entrenador.nombre} acompañando un entrenamiento en Body People`} loading="lazy" />
+            </span>
             <span class="objetivo__nombre">{prog.nombre}</span>
             <span class="objetivo__detalle">{prog.detalle}</span>
             <span class="objetivo__accion"><IconoWhatsApp size={16} /> Escribir con este objetivo</span>
@@ -80,12 +100,17 @@ const preguntas = [
 <section class="seccion" id="metodo" aria-labelledby="metodo-titulo">
   <div class="contenedor partida">
     <div class="seccion__cabeza">
-      <p class="antetitulo">Tu primera vez</p>
-      <h2 id="metodo-titulo">Primero te conocemos. Después entrenas con plan.</h2>
+      <p class="antetitulo">{reto.activo ? `Así funciona el ${reto.nombre}` : "Tu primera vez"}</p>
+      <h2 id="metodo-titulo">{reto.activo ? "Tú pones las ganas. Yo, el plan y el acompañamiento." : "Primero te conocemos. Después entrenas con plan."}</h2>
       <p>No llegas a adivinar qué máquina usar: sales de la valoración sabiendo qué hacer.</p>
+      {reto.activo && (
+        <div class="metodo__accion">
+          <a target="_blank" rel="noopener" class="boton boton--principal" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="como-funciona"><IconoWhatsApp size={20} /> Quiero mi cupo en el reto</a>
+        </div>
+      )}
     </div>
     <ol class="ficha">
-      {metodo.map((paso) => (
+      {(reto.activo ? pasosReto : metodo).map((paso) => (
         <li><h3>{paso.titulo}</h3><p>{paso.texto}</p></li>
       ))}
     </ol>
@@ -132,11 +157,12 @@ const preguntas = [
     <div class="planes">
       {reto.activo && (
         <article class="plan plan--destacado">
-          <p class="plan__nombre">{reto.nombre}</p>
-          <p><span class="precio plan__precio">{pesos(reto.precio)}</span> <span class="plan__periodo">el mes</span></p>
-          <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
-          <p class="plan__nota">Si sigues, tu mensualidad queda congelada en {pesos(reto.continuidad)}.</p>
-          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero un cupo</a>
+          <p class="plan__nombre">{reto.nombre} · {reto.lema}</p>
+          <p><span class="precio plan__precio">{pesos(reto.precio)}</span> <span class="plan__periodo">primer mes</span></p>
+          {reto.comparacion && <p class="plan__destaque">{reto.comparacion}</p>}
+          <ul class="lista-check">{reto.incluye.map((i) => <li>{i}</li>)}{reto.incluye_inscripcion && <li>Inscripción incluida</li>}{reto.sin_permanencia && <li>Sin permanencia</li>}</ul>
+          <p class="plan__nota">Solo {reto.personas_por_grupo} personas por reto. No incluye plan nutricional. Desde el segundo mes pagas la mensualidad normal de {pesos(precios.mensualidad)}.</p>
+          <a target="_blank" class="boton boton--principal boton--ancho" href={whatsapp(MENSAJES.reto)} data-intencion="reto" data-ubicacion="precios" rel="noopener"><IconoWhatsApp size={20} /> Quiero mi cupo en el reto</a>
         </article>
       )}
       <article class="plan">
@@ -217,7 +243,7 @@ const preguntas = [
         <details>
           <summary>{q.p}</summary>
           <p>{q.r}</p>
-          {q.intencion && <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES[q.intencion])} data-intencion={q.intencion} data-ubicacion="preguntas" rel="noopener">Escríbenos y te contamos cómo empezar</a>}
+          {q.intencion && <a target="_blank" class="enlace-flecha" href={whatsapp(MENSAJES[q.intencion])} data-intencion={q.intencion} data-ubicacion="preguntas" rel="noopener">{q.intencion === "reto" ? "Quiero mi cupo en el reto" : "Escríbenos y te contamos cómo empezar"}</a>}
         </details>
       ))}
     </div>
@@ -227,9 +253,9 @@ const preguntas = [
 <!-- Cierre -->
 <section class="cierre" aria-labelledby="cierre-titulo">
   <div class="contenedor cierre__caja">
-    <h2 id="cierre-titulo">{reto.activo ? `Empieza el ${reto.nombre}` : "Empieza con tu valoración gratis"}</h2>
-    <p>Escríbenos por WhatsApp y agendamos tu valoración de ingreso.</p>
-    <a target="_blank" class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre" rel="noopener"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero un cupo del reto" : "Agendar mi valoración gratis"}</a>
+    <h2 id="cierre-titulo">{reto.activo ? "Te reto a empezar" : "Empieza con tu valoración gratis"}</h2>
+    <p>{reto.activo ? `${reto.nombre}: ${pesos(reto.precio)} tu primer mes. Solo ${reto.personas_por_grupo} personas por reto.` : "Escríbenos por WhatsApp y agendamos tu valoración de ingreso."}</p>
+    <a target="_blank" class="boton boton--principal" href={whatsapp(reto.activo ? MENSAJES.reto : MENSAJES.valoracion)} data-intencion={reto.activo ? "reto" : "valoracion"} data-ubicacion="cierre" rel="noopener"><IconoWhatsApp size={22} /> {reto.activo ? "Quiero mi cupo en el reto" : "Agendar mi valoración gratis"}</a>
   </div>
 </section>
 
@@ -237,9 +263,14 @@ const preguntas = [
 <style>
   .fila-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
 
-  .objetivos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .objetivo { display: grid; gap: 6px; height: 100%; padding: 18px; border-radius: var(--radio); background: var(--papel); text-decoration: none; box-shadow: 0 0 0 1px var(--linea); transition: box-shadow .15s ease; }
+  .objetivos { list-style: none; margin: 0 calc(-1 * var(--gutter)); padding: 2px var(--gutter) 8px; display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); }
+  .objetivos li { scroll-snap-align: start; }
+  .objetivos__pista { font-size: var(--t-xs); color: var(--tenue); margin-top: 6px; }
+  .objetivo { display: grid; gap: 6px; align-content: start; height: 100%; padding: 0 0 18px; overflow: hidden; border-radius: var(--radio); background: var(--papel); text-decoration: none; box-shadow: 0 0 0 1px var(--linea); transition: box-shadow .15s ease; }
   .objetivo:hover { box-shadow: 0 0 0 2px var(--tinta); }
+  .objetivo > span:not(.objetivo__foto) { padding-inline: 18px; }
+  .objetivo__foto { position: relative; display: block; margin-bottom: 10px; }
+  .objetivo__foto :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
   .objetivo__nombre { font-weight: 700; font-stretch: 85%; font-size: var(--t-l); line-height: 1.15; }
   .objetivo__detalle { color: var(--tinta-2); font-size: var(--t-s); }
   .objetivo__accion { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: var(--t-s); font-weight: 650; color: var(--rojo); }
@@ -248,6 +279,7 @@ const preguntas = [
   .ficha li { counter-increment: paso; display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; row-gap: 4px; padding: 18px 0; border-bottom: 1px dashed var(--linea); }
   .ficha li::before { content: counter(paso, decimal-leading-zero); grid-row: span 2; font-family: var(--cifra); font-weight: 900; font-size: 1.9rem; line-height: 0.9; color: var(--tinta); }
   .ficha p { color: var(--tinta-2); font-size: var(--t-s); }
+  .metodo__accion { margin-top: 8px; }
 
   .mariano__acciones { margin-top: 8px; }
   .mariano { display: grid; gap: 20px; }
@@ -267,6 +299,7 @@ const preguntas = [
   .plan__periodo { color: var(--tenue); font-size: var(--t-s); }
   .plan .lista-check { font-size: var(--t-s); }
   .plan__nota { font-size: var(--t-xs); color: var(--tenue); }
+  .plan__destaque { font-weight: 650; color: var(--rojo); font-size: var(--t-s); }
   .plan .boton { font-size: var(--t-s); padding-inline: 14px; }
 
   .galeria { list-style: none; margin: 0; padding: 0 var(--gutter) 6px; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); }
@@ -301,7 +334,8 @@ const preguntas = [
 
 
   @media (min-width: 760px) {
-    .objetivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .objetivos { margin: 0; padding: 0; grid-auto-flow: row; grid-auto-columns: auto; overflow: visible; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .objetivos__pista { display: none; }
     .planes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (min-width: 960px) {

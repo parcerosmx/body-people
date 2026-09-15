@@ -1,5 +1,6 @@
 ---
-import logo from "../assets/marca/logo-body-people.svg?url";
+import { Image } from "astro:assets";
+import logo from "../assets/marca/logo-escudo-2024.png";
 import IconoWhatsApp from "./IconoWhatsApp.astro";
 import { negocio, whatsapp, MENSAJES } from "../lib/negocio";
 
@@ -8,7 +9,7 @@ const mensaje = negocio.reto.activo ? MENSAJES.reto : MENSAJES.valoracion;
 <header class="encabezado">
   <div class="contenedor encabezado__fila">
     <a class="encabezado__marca" href="/" aria-label={`${negocio.nombre}, inicio`}>
-      <img src={logo} alt="" width="106" height="40" />
+      <Image src={logo} alt="" widths={[240, 480]} sizes="138px" loading="eager" class="encabezado__logo" />
     </a>
     <nav class="encabezado__nav" aria-label="Secciones">
       <a href="#precios">Precios</a>
@@ -18,7 +19,7 @@ const mensaje = negocio.reto.activo ? MENSAJES.reto : MENSAJES.valoracion;
     <a target="_blank" class="encabezado__wa" href={whatsapp(mensaje)} data-intencion={negocio.reto.activo ? "reto" : "valoracion"} data-ubicacion="encabezado" rel="noopener">
       <IconoWhatsApp size={20} />
       <span class="solo-movil">Escríbenos</span>
-      <span class="solo-escritorio">{negocio.reto.activo ? `Quiero un cupo del ${negocio.reto.nombre}` : "Agendar mi valoración gratis"}</span>
+      <span class="solo-escritorio">{negocio.reto.activo ? "Quiero mi cupo en el reto" : "Agendar mi valoración gratis"}</span>
     </a>
   </div>
 </header>
@@ -26,8 +27,9 @@ const mensaje = negocio.reto.activo ? MENSAJES.reto : MENSAJES.valoracion;
 <style>
   .encabezado { position: absolute; inset: 0 0 auto; z-index: 5; }
   .encabezado__fila { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
-  .encabezado__marca { display: inline-flex; background: var(--marca); padding: 8px 12px; border-radius: 10px; box-shadow: var(--sombra); }
-  .encabezado__marca img { height: 26px; width: auto; }
+  /* Logo 2024 (el de la camiseta): escudo rojo con fondo transparente, 500×174 px. */
+  .encabezado__marca { display: inline-flex; filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.35)); }
+  .encabezado__marca :global(.encabezado__logo) { height: 48px; width: auto; }
   .encabezado__nav { display: none; }
   .encabezado__wa {
     display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border-radius: 999px;
@@ -41,6 +43,7 @@ const mensaje = negocio.reto.activo ? MENSAJES.reto : MENSAJES.valoracion;
     .encabezado__nav { display: flex; gap: 32px; margin-left: auto; font-weight: 600; font-size: var(--t-s); }
     .encabezado__nav a { text-decoration: none; color: var(--tinta-2); }
     .encabezado__nav a:hover { color: var(--tinta); }
+    .encabezado__marca { filter: none; }
     .encabezado__wa { background: var(--rojo); color: #fff; box-shadow: none; padding: 10px 18px; }
     .encabezado__wa:hover { background: var(--rojo-hover); }
     .encabezado__wa svg { color: #fff; }

@@ -39,7 +39,7 @@ export function schemaGimnasio(site: URL) {
     { "@type": "Offer", name: "Valoración de ingreso", price: 0, priceCurrency: "COP" },
     { "@type": "Offer", name: "Mensualidad", price: n.precios.mensualidad, priceCurrency: "COP" },
     { "@type": "Offer", name: "Primer mes con inscripción", price: n.precios.primer_mes, priceCurrency: "COP" },
-    ...(n.reto.activo ? [{ "@type": "Offer", name: n.reto.nombre, price: n.reto.precio, priceCurrency: "COP" }] : []),
+    ...(n.reto.activo ? [{ "@type": "Offer", name: `${n.reto.nombre} (primer mes)`, price: n.reto.precio, priceCurrency: "COP" }] : []),
   ];
 
   return {
@@ -51,7 +51,7 @@ export function schemaGimnasio(site: URL) {
     telephone: n.contacto.telefono,
     image: [new URL("/og-body-people.jpg", site).href],
     logo: new URL("/apple-touch-icon.png", site).href,
-    description: `Gimnasio en el ${n.direccion.sector} de ${n.direccion.ciudad}. ${n.entrenador.nombre} (${n.entrenador.titulo}) arma tu plan de entrenamiento y nutricional y controla tu progreso cada mes.`,
+    description: `Gimnasio en el ${n.direccion.sector} de ${n.direccion.ciudad}. ${n.entrenador.nombre} (${n.entrenador.titulo}) arma tu plan de entrenamiento y controla tu progreso cada mes.`,
     address: {
       "@type": "PostalAddress",
       streetAddress: `${n.direccion.calle}, ${n.direccion.sector}`,

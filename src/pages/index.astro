@@ -2,20 +2,24 @@
 import Base from "../layouts/Base.astro";
 import Encabezado from "../components/Encabezado.astro";
 import Hero from "../components/Hero.astro";
+import Excusas from "../components/Excusas.astro";
 import Secciones from "../components/Secciones.astro";
 import Pie from "../components/Pie.astro";
 import BarraFija from "../components/BarraFija.astro";
-import { negocio } from "../lib/negocio";
+import { negocio, pesos } from "../lib/negocio";
 import { schemaGimnasio } from "../lib/schema";
 
 // Title ≤ 60 caracteres y description ≤ 155: lo que Google muestra sin cortar.
 const titulo = "Gimnasio Body People | Gimnasio en el Amarilo, Villavicencio";
-const descripcion = `Gimnasio en el sector Amarilo, Villavicencio. ${negocio.entrenador.nombre} te arma tu plan de entrenamiento y nutricional. Valoración de ingreso gratis.`;
+const descripcion = negocio.reto.activo
+  ? `Gimnasio en el sector Amarilo, Villavicencio. ${negocio.reto.nombre}: primer mes por ${pesos(negocio.reto.precio)}, con plan de entrenamiento y acompañamiento de ${negocio.entrenador.nombre}.`
+  : `Gimnasio en el sector Amarilo, Villavicencio. ${negocio.entrenador.nombre} te arma tu plan de entrenamiento y te acompaña. Valoración de ingreso gratis.`;
 ---
 <Base titulo={titulo} descripcion={descripcion} schema={schemaGimnasio(Astro.site!)}>
   <Encabezado />
   <main>
     <Hero />
+    <Excusas />
     <Secciones />
   </main>
   <Pie />

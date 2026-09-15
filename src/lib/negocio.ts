@@ -17,10 +17,10 @@ export interface Negocio {
   festivos: string[];
   precios: { mensualidad: number; primer_mes: number; valoracion_gratis: boolean };
   reto: {
-    activo: boolean; nombre: string; precio: number; continuidad: number;
-    sin_permanencia: boolean; personas_por_grupo: number; incluye: string[]; garantia: string;
+    activo: boolean; nombre: string; lema: string; precio: number; incluye_inscripcion: boolean;
+    sin_permanencia: boolean; personas_por_grupo: number; incluye: string[]; comparacion: string; garantia: string;
   };
-  programas: { id: string; nombre: string; corto: string; detalle: string }[];
+  programas: { id: string; nombre: string; corto: string; detalle: string; imagen: string; imagen_ia: boolean }[];
   servicios: string[];
   no_ofrece: string[];
   comodidades: string[];
@@ -46,7 +46,7 @@ function validar(d: any): Negocio {
   for (const k of ["mensualidad", "primer_mes"]) exigir(Number.isInteger(d?.precios?.[k]) && d.precios[k] > 0, `«precios.${k}» debe ser un número sin puntos, como 105000`);
   exigir(typeof d?.reto?.activo === "boolean", "«reto.activo» debe ser true o false");
   if (d?.reto?.activo) {
-    for (const k of ["precio", "continuidad", "personas_por_grupo"]) exigir(Number.isInteger(d?.reto?.[k]) && d.reto[k] > 0, `«reto.${k}» debe ser un número sin puntos`);
+    for (const k of ["precio", "personas_por_grupo"]) exigir(Number.isInteger(d?.reto?.[k]) && d.reto[k] > 0, `«reto.${k}» debe ser un número sin puntos`);
     exigir(Array.isArray(d?.reto?.incluye) && d.reto.incluye.length > 0, "«reto.incluye» necesita al menos un ítem");
   }
 
@@ -86,7 +86,7 @@ export const direccionCompleta = () => {
  * La clave es la «intención» que se mide como evento (entrega 3).
  */
 export const MENSAJES = {
-  reto: `Hola Mariano, quiero un cupo del ${negocio.reto.nombre} en Body People.`,
+  reto: `Hola Mariano, quiero un cupo en el ${negocio.reto.nombre} de Body People. ¡Acepto el reto!`,
   valoracion: "Hola Mariano, quiero agendar mi valoración gratis en Body People.",
   precios: "Hola, vi los precios en la web y quiero agendar mi valoración gratis.",
   horario: "Hola, ¿qué horario me recomiendas para ir a la valoración?",

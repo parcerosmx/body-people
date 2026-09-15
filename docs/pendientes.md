@@ -103,6 +103,71 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
    - registrar `intencion`, `ubicacion` y `canal` como dimensiones personalizadas de evento.
 3. **Enlazar Search Console con GA4** para ver búsquedas y conversiones juntas.
 
+## Cambio de oferta y logo (15-sep-2026, pedido por Andrés)
+
+- **Logo 2024** (el de la camiseta de Mariano): escudo rojo «BODY (B) PEOPLE GIMNASIO», en
+  `src/assets/marca/logo-escudo-2024.png` (500×174, transparente).
+  - No existe versión vectorial ni más grande: se buscó en iCloud (los PDF de 2022 traen el logo viejo), en Drive
+    y en las piezas de Facebook.
+  - Va en el encabezado y en la imagen para compartir; el favicon sigue siendo la «B».
+- **Reto 30 días · No hay excusas:**
+  - $69.900 **primer mes**, con la inscripción incluida;
+  - desde el segundo mes, la mensualidad normal de **$105.000** (se quitó la continuidad de $99.900);
+  - incluye valoración inicial, plan de entrenamiento, acompañamiento semipersonalizado y garantía;
+  - **no incluye plan nutricional**, que sigue en la mensualidad normal;
+  - garantía: «si entrenas mínimo 3 veces por semana y no se cumplen tus objetivos, el segundo mes es gratis»;
+  - «reto para solo 25 personas».
+- ⚠️ **Frase «La mensualidad más económica de la ciudad»:** Andrés la decidió asumiendo el riesgo. La investigación
+  encontró entradas más baratas con permanencia o pago anticipado (Smart Fit $19.900 × 2 meses, HYL ~$59.775/mes).
+  Vive en `reto.comparacion` y se apaga dejándola vacía.
+- **Hero nuevo:** «Te reto a empezar. Yo te acompaño.» Sección nueva **«No hay excusas»**
+  (`src/components/Excusas.astro`) con cada excusa tachada: costo, motivación y «¿y si no funciona?».
+- **Imágenes en las tarjetas de objetivos** (investigación con fuentes: gente real e identificable, entrenando,
+  sin cuerpos de modelo ni «resultados»):
+  - bajar de peso, piernas y glúteos, y masa muscular: **generadas con GPT Image 2.5 en Higgsfield** (CLI
+    `higgsfield`, cuenta contacto@parceros.mx), usando fotos reales del gimnasio como escenario;
+  - **sin rótulo de IA** (decisión de Andrés, 15-sep-2026). `imagen_ia: true` en `negocio.yml` solo registra el
+    origen. Nunca se presentan como socios, testimonios ni resultados;
+  - si se reusan en anuncios, Meta puede etiquetarlas como IA por su cuenta;
+  - «Empezar desde cero»: foto **real** de Mariano acompañando;
+  - originales, 9 variantes y prompts: `~/src/claude-ia/bodypeople-maps/fotos/ia-objetivos/`.
+  - Ideal a futuro: reemplazarlas por una sesión corta con socios reales de 30 a 50 años, con su permiso.
+- ⚠️ **La garantía obliga** (Ley 1480, art. 29): «no se cumplen tus objetivos» tiene que quedar medible y por
+  escrito en la valoración de cada persona.
+- La imagen para compartir dice «No hay excusas · Solo 25 personas»: **regenerarla si se apaga el reto**
+  (`scripts/og/generar.py`).
+- ⚠️ **El guion del video** (`bodypeople-maps/video-reto-30-dias.md`) todavía dice $99.900, 12 sesiones y plan de
+  alimentación: hay que alinearlo antes de pautar.
+
+## Auditoría contra la investigación (15-sep-2026)
+
+Se revisó la web contra el Artifact de la entrega 1: las 8 prácticas de conversión, los patrones de los referentes,
+las conclusiones de competencia y la estructura propuesta.
+
+**Cumple:** una sola acción principal con barra fija en celular y botón en el encabezado fijo en escritorio ·
+oferta sin riesgo con garantía · precio visible en la primera pantalla y comparación · FAQ en acordeón con
+objeciones de principiante · horario con estado «abierto ahora» y festivos · «Cómo llegar» sin iframe ·
+WhatsApp por intención con mensaje precargado · schema, canonical, robots y sitemap · Lighthouse ≥ 95.
+
+**Corregido en esta auditoría:**
+1. El botón del hero quedaba en el borde de la primera pantalla en celular (píxel 818 de 844) → foto del hero más
+   compacta: ahora el botón cae en 718-770.
+2. La acción principal tenía tres nombres distintos («Quiero mi cupo en el reto», «Acepto el reto», «Quiero un
+   cupo») → **un solo nombre repetido**, que es el patrón más fuerte de los referentes.
+3. Faltaban los pasos explícitos (Equinox «2 steps», Crunch «STEP 1-2-3») y el método mostraba plan nutricional,
+   que el reto no incluye → sección **«Así funciona el Reto 30 días»** en 4 pasos, con botón. El método general
+   vuelve solo si se apaga el reto.
+4. La página medía 10.296 px en celular, con 1.921 de tarjetas apiladas → **carrusel horizontal** con scroll-snap:
+   objetivos en 707 px y página en 9.093 px.
+5. Faltaba decir qué pasa al tocar el botón → microcopy «Escríbenos por WhatsApp y agendamos tu valoración inicial».
+
+**Lighthouse en celular tras los cambios (local, 3 corridas):** 99 · 100 · 100 · 100, LCP 2,1 s, CLS 0, 346 KB.
+
+**Lo que sigue faltando y no depende del diseño:**
+- **Prueba social real.** Es el hueco más grande: la sección solo enlaza a Google. Hacen falta las 2 reseñas con
+  permiso de Andrés, y seguir pidiendo reseñas (la investigación: el 47 % no usa un negocio con menos de 20).
+- Testimonios con nombre, edad o barrio, y fotos de socios reales de 30 a 50 años (no se inventan).
+
 ## ▶️ Lo que queda (en orden)
 
 1. ✅ **GitHub Pages apagado** (15-sep-2026). La rama de origen quedó en «None» y `andrestntx.github.io/body-people` da 404.
