@@ -105,16 +105,13 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
 
 ## ▶️ Lo que queda (en orden)
 
-1. **Apagar GitHub Pages** (solo `andrestntx`, desde su Chrome):
-   - entrar a github.com/andrestntx/body-people/settings/pages y dejar el origen en «None» (o «Unpublish site»);
-   - hoy Pages sigue compilando `main` en `andrestntx.github.io/body-people`, sin dominio. No afecta la web
-     publicada, pero sobra.
-2. **Conectar Vercel con GitHub** para que `main` publique solo:
-   - andrestntx instala la app de Vercel en https://github.com/apps/vercel/installations/new, con «Only select
-     repositories» → `body-people`;
-   - después: `vercel git connect https://github.com/andrestntx/body-people.git --scope parceros` (hoy falla por
-     falta de esa app).
-   - **Mientras tanto se publica a mano desde `main`:** `vercel deploy --prod --scope parceros`.
+1. ✅ **GitHub Pages apagado** (15-sep-2026). La rama de origen quedó en «None» y `andrestntx.github.io/body-people` da 404.
+2. ✅ **Vercel conectado con GitHub** (15-sep-2026):
+   - el repo se **transfirió a `parcerosmx/body-people`** (decisión de Andrés), como `parceros-web` y `parceros-turnos`;
+   - `vercel git connect` quedó listo, con `main` como rama de producción: **todo push a `main` publica solo** y cada
+     rama o PR genera un preview protegido;
+   - limpieza opcional: desinstalar la app de Vercel de la cuenta `andrestntx` en github.com/settings/installations,
+     porque ya no tiene repos.
 3. **Meta:** en el Administrador de eventos → Pixel `989182581694959` → «Probar eventos»:
    - abrir gimnasiobodypeople.com desde el celular;
    - tocar WhatsApp y «Cómo llegar»;
@@ -125,7 +122,8 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
 5. **GA4:** crear la propiedad y pegar el ID en `medicion.ga4` (ver propuesta arriba).
 6. **PR opcional `rendimiento-lcp`:**
    - la foto del hero pasa a decodificación síncrona y el Pixel carga en un momento libre del navegador;
-   - en local no cambia nada medible, así que conviene probarlo en producción y medir.
+   - en local no cambia nada medible. **Mergearlo publica en producción**; después, medir con Lighthouse y comparar
+     contra 95–96 / LCP 2,7–2,8 s.
 7. Contenido pendiente:
    - permiso para las reseñas;
    - duración de la valoración;
@@ -152,7 +150,7 @@ Actualizado el 15-sep-2026, al cerrar la **entrega 4 de 4**. **La web nueva est�
      - `bodypeople.com.co` sigue redirigiendo;
      - en el dominio real no hay `noindex`.
   4. **Merge:** PR https://github.com/andrestntx/body-people/pull/1 mergeado en `main` (513a1ee).
-  5. **GitHub Pages:** ⏳ pendiente. Hace falta la cuenta andrestntx; el Chrome personal no estaba conectado.
+  5. **GitHub Pages:** ✅ apagado. El repo se transfirió a `parcerosmx` y quedó conectado a Vercel.
 - **Lighthouse en celular sobre el dominio publicado** (3 corridas):
   - rendimiento 95–96, accesibilidad 100, buenas prácticas 100, SEO 100;
   - LCP 2,7–2,8 s (1 s de espera de pintado que en local no aparece), TBT 50–70 ms, 252 KB;
